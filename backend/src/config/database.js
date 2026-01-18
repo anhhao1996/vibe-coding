@@ -12,7 +12,7 @@ class DatabaseConfig {
 
   async getPool() {
     if (!this.pool) {
-      this.pool = mysql.createPool({
+      const config = {
         host: process.env.DB_HOST || 'localhost',
         port: process.env.DB_PORT || 3306,
         user: process.env.DB_USER || 'root',
@@ -21,7 +21,16 @@ class DatabaseConfig {
         waitForConnections: true,
         connectionLimit: 10,
         queueLimit: 0
-      });
+      };
+
+      // Enable SSL for cloud databases (TiDB, PlanetScale, etc.)
+      if (process.env.DB_SSL === 'true') {
+        config.ssl = {
+          rejectUnauthorized: true
+        };
+      }
+
+      this.pool = mysql.createPool(config);
     }
     return this.pool;
   }
