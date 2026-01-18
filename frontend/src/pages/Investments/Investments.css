@@ -1,0 +1,345 @@
+/* Investments Page Styles */
+.investments-page {
+  animation: fadeIn var(--transition-normal) forwards;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-xl);
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--error-light);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  color: #C62828;
+}
+
+/* Categories Grid */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: var(--spacing-lg);
+  align-items: stretch;
+}
+
+/* Category Card */
+.category-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--category-color, var(--primary-500));
+}
+
+.category-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.category-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+}
+
+.category-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.category-color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.category-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.category-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all var(--transition-fast);
+}
+
+.action-btn:hover {
+  background: var(--bg-tertiary);
+}
+
+.action-btn.danger:hover {
+  background: var(--error-light);
+}
+
+.category-description {
+  padding: 0 var(--spacing-lg);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin: 0;
+  margin-bottom: var(--spacing-md);
+}
+
+.category-stats {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--bg-tertiary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.stat-value {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.stat-value.profit {
+  color: var(--success);
+}
+
+.stat-value.loss {
+  color: var(--error);
+}
+
+.stat-row.highlight {
+  background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
+  margin: var(--spacing-xs) calc(-1 * var(--spacing-lg));
+  padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+.stat-row.pnl-row {
+  padding-top: var(--spacing-sm);
+  border-top: 1px dashed var(--border-light);
+  margin-top: var(--spacing-xs);
+}
+
+.stat-row.pnl-row.profit {
+  background: rgba(102, 187, 106, 0.1);
+  margin: var(--spacing-xs) calc(-1 * var(--spacing-lg));
+  padding: var(--spacing-sm) var(--spacing-lg);
+  margin-bottom: calc(-1 * var(--spacing-md));
+}
+
+.stat-row.pnl-row.loss {
+  background: rgba(239, 83, 80, 0.1);
+  margin: var(--spacing-xs) calc(-1 * var(--spacing-lg));
+  padding: var(--spacing-sm) var(--spacing-lg);
+  margin-bottom: calc(-1 * var(--spacing-md));
+}
+
+.category-card-footer {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.category-card-footer .btn {
+  flex: 1;
+}
+
+/* Price Update Form */
+.price-update-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.price-info {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.info-value {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.price-preview {
+  background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
+  border: 1px solid var(--primary-200);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.preview-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+}
+
+.preview-row .number {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+/* Empty State */
+.empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 2px dashed var(--border-light);
+  text-align: center;
+}
+
+.empty-state .empty-icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-primary);
+}
+
+.empty-state p {
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  color: var(--text-muted);
+}
+
+.loading-state .spinner {
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Special buttons */
+.btn-dcds {
+  background: linear-gradient(135deg, #1976D2 0%, #0D47A1 100%);
+  color: white;
+}
+
+.btn-dcds:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+  color: white;
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #FFB300 0%, #FF8F00 100%);
+  color: #3E2723;
+}
+
+.btn-gold:hover:not(:disabled) {
+  background: linear-gradient(135deg, #FFA000 0%, #FF6F00 100%);
+  color: #3E2723;
+}
+
+.btn-usd {
+  background: linear-gradient(135deg, #43A047 0%, #2E7D32 100%);
+  color: white;
+}
+
+.btn-usd:hover:not(:disabled) {
+  background: linear-gradient(135deg, #388E3C 0%, #1B5E20 100%);
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .page-header .btn {
+    width: 100%;
+  }
+}
