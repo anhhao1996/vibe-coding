@@ -99,7 +99,7 @@ class PortfolioSnapshot extends BaseModel {
         ) as cumulative_pnl
       FROM ${this.tableName} ps
       JOIN categories c ON ps.category_id = c.id
-      WHERE ps.snapshot_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+      WHERE ps.snapshot_date >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
         AND c.user_id = ?
       GROUP BY ps.snapshot_date
       ORDER BY ps.snapshot_date ASC

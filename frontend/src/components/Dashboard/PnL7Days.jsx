@@ -52,7 +52,10 @@ const PnL7Days = ({ data = [] }) => {
     pnl: parseFloat(item.daily_pnl) || 0
   }));
 
-  const totalPnl = chartData.reduce((sum, item) => sum + item.pnl, 0);
+  // Tính PnL: giá trị cột cuối - giá trị cột đầu
+  const totalPnl = chartData.length >= 2 
+    ? chartData[chartData.length - 1].pnl - chartData[0].pnl 
+    : (chartData[0]?.pnl || 0);
 
   return (
     <div className="chart-container">
