@@ -53,12 +53,18 @@ const PortfolioLineChart = ({ data = [], days = 30 }) => {
     );
   }
 
-  const chartData = data.map(item => ({
-    date: item.snapshot_date,
-    value: parseFloat(item.total_value) || 0,
-    invested: parseFloat(item.total_invested) || 0,
-    pnl: parseFloat(item.total_pnl) || 0
-  }));
+  const chartData = data.map(item => {
+    const totalValue = parseFloat(item.total_value) || 0;
+    const totalSold = parseFloat(item.total_sold) || 0;
+    return {
+      date: item.snapshot_date,
+      // Giá trị = Giá trị hiện tại + Tổng đã bán
+      value: totalValue + totalSold,
+      // Đầu tư = Tổng đầu tư (sum of buy transactions)
+      invested: parseFloat(item.total_invested) || 0,
+      pnl: parseFloat(item.total_pnl) || 0
+    };
+  });
 
   return (
     <div className="chart-container chart-large">

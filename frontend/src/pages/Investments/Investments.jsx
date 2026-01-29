@@ -136,10 +136,8 @@ const Investments = () => {
 
   const openPriceModal = (category) => {
     setUpdatingCategory(category);
-    // Tính giá hiện tại từ current_value / quantity
-    const quantity = parseFloat(category.quantity) || 0;
-    const currentValue = parseFloat(category.current_value) || 0;
-    const price = quantity > 0 ? (currentValue / quantity) : 0;
+    // Lấy giá hiện tại (1 đơn vị) trực tiếp từ database
+    const price = parseFloat(category.current_price) || 0;
     const priceStr = price > 0 ? price.toString() : '';
     setCurrentPrice(priceStr);
     setDisplayPrice(priceStr ? formatNumberInput(priceStr) : '');
@@ -166,11 +164,9 @@ const Investments = () => {
 
     setSubmitting(true);
     try {
-      const quantity = parseFloat(updatingCategory.quantity) || 0;
       const price = parseFloat(currentPrice) || 0;
-      const newValue = quantity * price;
-
-      await portfolioApi.updateCurrentValue(updatingCategory.id, newValue);
+      // Gửi giá 1 đơn vị trực tiếp, backend sẽ lưu vào current_price
+      await portfolioApi.updateCurrentPrice(updatingCategory.id, price);
       closePriceModal();
       fetchCategories();
     } catch (err) {
@@ -360,9 +356,13 @@ const Investments = () => {
           </div>
         ) : (
           categories.map((category, index) => {
-            const pnl = (parseFloat(category.current_value) || 0) - (parseFloat(category.total_invested) || 0);
-            const pnlPercentage = parseFloat(category.total_invested) > 0 
-              ? (pnl / parseFloat(category.total_invested) * 100) 
+            const currentValue = parseFloat(category.current_value) || 0;
+            const totalInvested = parseFloat(category.total_invested) || 0;
+            const totalSold = parseFloat(category.total_sold) || 0;
+            // Lãi/Lỗ = (Giá trị hiện tại + Tổng đã bán) - Tổng đầu tư
+            const pnl = (currentValue + totalSold) - totalInvested;
+            const pnlPercentage = totalInvested > 0 
+              ? (pnl / totalInvested * 100) 
               : 0;
             const pnlClass = getPnlClass(pnl);
 
@@ -412,11 +412,17 @@ const Investments = () => {
                   </div>
                   <div className="stat-row">
                     <span className="stat-label">Tổng đầu tư</span>
-                    <span className="stat-value number">{formatCurrency(category.total_invested)}</span>
+                    <span className="stat-value number">{formatCurrency(totalInvested)}</span>
                   </div>
+                  {totalSold > 0 && (
+                    <div className="stat-row">
+                      <span className="stat-label">Tổng đã bán</span>
+                      <span className="stat-value number sold">{formatCurrency(totalSold)}</span>
+                    </div>
+                  )}
                   <div className="stat-row highlight">
                     <span className="stat-label">💰 Giá trị hiện tại</span>
-                    <span className="stat-value number">{formatCurrency(category.current_value)}</span>
+                    <span className="stat-value number">{formatCurrency(currentValue)}</span>
                   </div>
                   <div className={`stat-row pnl-row ${pnlClass}`}>
                     <span className="stat-label">📈 Lãi/Lỗ</span>
@@ -545,9 +551,17 @@ const Investments = () => {
                 </div>
                 <div className="preview-row">
                   <span>Lãi/Lỗ dự kiến:</span>
-                  <span className={`number ${getPnlClass((parseFloat(updatingCategory.quantity) * parseFloat(currentPrice)) - parseFloat(updatingCategory.total_invested))}`}>
-                    {formatCurrency((parseFloat(updatingCategory.quantity) * parseFloat(currentPrice)) - parseFloat(updatingCategory.total_invested))}
-                  </span>
+                  {(() => {
+                    const newValue = parseFloat(updatingCategory.quantity) * parseFloat(currentPrice);
+                    const totalSold = parseFloat(updatingCategory.total_sold) || 0;
+                    const totalInvested = parseFloat(updatingCategory.total_invested) || 0;
+                    const expectedPnl = (newValue + totalSold) - totalInvested;
+                    return (
+                      <span className={`number ${getPnlClass(expectedPnl)}`}>
+                        {formatCurrency(expectedPnl)}
+                      </span>
+                    );
+                  })()}
                 </div>
               </div>
             )}

@@ -53,7 +53,7 @@ export const portfolioApi = {
   getPnlByCategory: () => api.get('/portfolio/pnl'),
   getPnl7Days: () => api.get('/portfolio/pnl-7days'),
   getHistory: (days = 30) => api.get(`/portfolio/history?days=${days}`),
-  updateCurrentValue: (categoryId, currentValue) => api.put(`/portfolio/value/${categoryId}`, { current_value: currentValue }),
+  updateCurrentPrice: (categoryId, currentPrice) => api.put(`/portfolio/price/${categoryId}`, { current_price: currentPrice }),
   createSnapshot: () => api.post('/portfolio/snapshot')
 };
 

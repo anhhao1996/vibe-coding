@@ -46,6 +46,7 @@ class PortfolioSnapshot extends BaseModel {
         ps.snapshot_date,
         SUM(ps.total_value) as total_value,
         SUM(ps.total_invested) as total_invested,
+        SUM(COALESCE(ps.total_sold, 0)) as total_sold,
         SUM(ps.pnl) as total_pnl,
         AVG(ps.pnl_percentage) as avg_pnl_percentage
       FROM ${this.tableName} ps

@@ -168,9 +168,16 @@ const Dashboard = () => {
             type="currency"
           />
           <StatCard
+            title="Tổng đã bán"
+            value={overview?.total_sold || 0}
+            icon="💵"
+            type="currency"
+            colorClass="sold"
+          />
+          <StatCard
             title="Giá trị hiện tại"
             value={overview?.total_value || 0}
-            icon="📈"
+            icon="📊"
             type="currency"
           />
           <StatCard

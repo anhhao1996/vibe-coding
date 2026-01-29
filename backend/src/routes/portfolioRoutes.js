@@ -25,8 +25,8 @@ router.get('/pnl-7days', (req, res) => PortfolioController.getPnl7Days(req, res)
 // GET /api/portfolio/history - Get portfolio history
 router.get('/history', (req, res) => PortfolioController.getHistory(req, res));
 
-// PUT /api/portfolio/value/:categoryId - Update current value
-router.put('/value/:categoryId', portfolioValidators.updateValue, (req, res) => PortfolioController.updateCurrentValue(req, res));
+// PUT /api/portfolio/price/:categoryId - Update current price (unit price)
+router.put('/price/:categoryId', portfolioValidators.updatePrice, (req, res) => PortfolioController.updateCurrentPrice(req, res));
 
 // POST /api/portfolio/snapshot - Create daily snapshot
 router.post('/snapshot', (req, res) => PortfolioController.createSnapshot(req, res));

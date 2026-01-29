@@ -61,17 +61,17 @@ class PortfolioController extends BaseController {
     }
   }
 
-  async updateCurrentValue(req, res) {
+  async updateCurrentPrice(req, res) {
     try {
       const { categoryId } = req.params;
-      const { current_value } = req.body;
+      const { current_price } = req.body;
 
-      if (current_value === undefined || current_value < 0) {
-        return this.sendBadRequest(res, 'Valid current_value is required');
+      if (current_price === undefined || current_price < 0) {
+        return this.sendBadRequest(res, 'Valid current_price is required');
       }
 
-      const holding = await PortfolioService.updateCurrentValue(categoryId, current_value, req.user.id);
-      return this.sendSuccess(res, holding, 'Current value updated successfully');
+      const holding = await PortfolioService.updateCurrentPrice(categoryId, current_price, req.user.id);
+      return this.sendSuccess(res, holding, 'Current price updated successfully');
     } catch (error) {
       return this.handleError(res, error);
     }

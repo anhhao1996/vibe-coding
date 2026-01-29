@@ -32,16 +32,17 @@ class Holding extends BaseModel {
         c.name as category_name,
         c.color as category_color,
         c.description as category_description,
-        (h.current_value - h.total_invested) as pnl,
+        (COALESCE(h.current_price, 0) * h.quantity) as current_value,
+        (((COALESCE(h.current_price, 0) * h.quantity) + COALESCE(h.total_sold, 0)) - h.total_invested) as pnl,
         CASE 
           WHEN h.total_invested > 0 
-          THEN ((h.current_value - h.total_invested) / h.total_invested * 100)
+          THEN ((((COALESCE(h.current_price, 0) * h.quantity) + COALESCE(h.total_sold, 0)) - h.total_invested) / h.total_invested * 100)
           ELSE 0 
         END as pnl_percentage
       FROM ${this.tableName} h
       JOIN categories c ON h.category_id = c.id
       WHERE c.user_id = ?
-      ORDER BY h.current_value DESC
+      ORDER BY (COALESCE(h.current_price, 0) * h.quantity) DESC
     `;
     return await this.db.query(sql, [userId]);
   }
@@ -50,11 +51,12 @@ class Holding extends BaseModel {
     const sql = `
       SELECT 
         SUM(h.total_invested) as total_invested,
-        SUM(h.current_value) as total_value,
-        SUM(h.current_value - h.total_invested) as total_pnl,
+        SUM(COALESCE(h.total_sold, 0)) as total_sold,
+        SUM(COALESCE(h.current_price, 0) * h.quantity) as total_value,
+        SUM(((COALESCE(h.current_price, 0) * h.quantity) + COALESCE(h.total_sold, 0)) - h.total_invested) as total_pnl,
         CASE 
           WHEN SUM(h.total_invested) > 0 
-          THEN ((SUM(h.current_value) - SUM(h.total_invested)) / SUM(h.total_invested) * 100)
+          THEN ((SUM(((COALESCE(h.current_price, 0) * h.quantity) + COALESCE(h.total_sold, 0)) - h.total_invested)) / SUM(h.total_invested) * 100)
           ELSE 0 
         END as total_pnl_percentage
       FROM ${this.tableName} h
@@ -91,15 +93,34 @@ class Holding extends BaseModel {
     });
 
     const quantity = buyQuantity - sellQuantity;
-    const totalInvested = buyAmount - sellAmount;
-    const averagePrice = quantity > 0 ? totalInvested / quantity : 0;
+    // Tổng đầu tư = Tổng giá trị các giao dịch MUA
+    const totalInvested = buyAmount;
+    // Tổng đã bán = Tổng giá trị các giao dịch BÁN
+    const totalSold = sellAmount;
+    // Giá vốn trung bình = (Tổng mua - Tổng bán) / Số lượng còn lại
+    const averagePrice = quantity > 0 ? (buyAmount - sellAmount) / quantity : 0;
+
+    // Get current holding to preserve current_price (giá hiện tại 1 đơn vị)
+    const existing = await this.findByCategory(categoryId);
+    // Giữ nguyên current_price, nếu chưa có thì dùng average_price làm mặc định
+    const currentPrice = existing ? (existing.current_price || averagePrice) : averagePrice;
 
     return await this.updateOrCreate(categoryId, {
       quantity: quantity,
       average_price: averagePrice,
+      current_price: currentPrice,
       total_invested: totalInvested,
-      current_value: totalInvested // Sẽ được cập nhật từ external source
+      total_sold: totalSold
     });
+  }
+
+  // Cập nhật giá hiện tại (1 đơn vị)
+  async updateCurrentPrice(categoryId, currentPrice) {
+    const holding = await this.findByCategory(categoryId);
+    if (!holding) {
+      throw new Error('Holding not found for this category');
+    }
+    return await this.update(holding.id, { current_price: currentPrice });
   }
 }
 

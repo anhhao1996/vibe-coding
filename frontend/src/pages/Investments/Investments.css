@@ -162,6 +162,10 @@
   color: var(--error);
 }
 
+.stat-value.sold {
+  color: #1976D2;
+}
+
 .stat-row.highlight {
   background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
   margin: var(--spacing-xs) calc(-1 * var(--spacing-lg));

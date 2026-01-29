@@ -10,7 +10,9 @@
     "db:migrate-auth": "node src/database/migrate-auth.js",
     "db:migrate-settings": "node src/database/migrate-user-settings.js",
     "db:seed-snapshots": "node src/database/seed-snapshots.js",
-    "db:clear-snapshots": "node src/database/clear-snapshots.js"
+    "db:clear-snapshots": "node src/database/clear-snapshots.js",
+    "db:migrate-total-sold": "node src/database/migrate-add-total-sold.js",
+    "db:migrate-current-price": "node src/database/migrate-add-current-price.js"
   },
   "dependencies": {
     "axios": "^1.13.2",

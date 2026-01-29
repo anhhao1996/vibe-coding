@@ -27,8 +27,10 @@ class Category extends BaseModel {
         c.*,
         COALESCE(h.quantity, 0) as quantity,
         COALESCE(h.average_price, 0) as average_price,
+        COALESCE(h.current_price, 0) as current_price,
         COALESCE(h.total_invested, 0) as total_invested,
-        COALESCE(h.current_value, 0) as current_value
+        COALESCE(h.total_sold, 0) as total_sold,
+        (COALESCE(h.current_price, 0) * COALESCE(h.quantity, 0)) as current_value
       FROM categories c
       LEFT JOIN holdings h ON c.id = h.category_id
       WHERE c.user_id = ?
@@ -43,8 +45,10 @@ class Category extends BaseModel {
         c.*,
         COALESCE(h.quantity, 0) as quantity,
         COALESCE(h.average_price, 0) as average_price,
+        COALESCE(h.current_price, 0) as current_price,
         COALESCE(h.total_invested, 0) as total_invested,
-        COALESCE(h.current_value, 0) as current_value,
+        COALESCE(h.total_sold, 0) as total_sold,
+        (COALESCE(h.current_price, 0) * COALESCE(h.quantity, 0)) as current_value,
         (SELECT COUNT(*) FROM transactions WHERE category_id = c.id) as transaction_count
       FROM categories c
       LEFT JOIN holdings h ON c.id = h.category_id

@@ -101,11 +101,11 @@ const transactionValidators = {
 
 // Portfolio validators
 const portfolioValidators = {
-  updateValue: [
+  updatePrice: [
     param('categoryId').isInt().withMessage('Invalid category ID'),
-    body('current_value')
-      .notEmpty().withMessage('Current value is required')
-      .isFloat({ min: 0 }).withMessage('Current value must be non-negative'),
+    body('current_price')
+      .notEmpty().withMessage('Current price is required')
+      .isFloat({ min: 0 }).withMessage('Current price must be non-negative'),
     handleValidation
   ]
 };

@@ -71,6 +71,10 @@
   color: var(--error);
 }
 
+.stat-card-value.sold {
+  color: #1976D2;
+}
+
 .stat-card-subtitle {
   font-size: 0.875rem;
   color: var(--text-muted);

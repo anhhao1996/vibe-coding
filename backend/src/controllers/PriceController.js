@@ -56,12 +56,12 @@ class PriceController extends BaseController {
         return this.sendNotFound(res, 'Category holding not found');
       }
 
-      // Tính giá trị mới = giá * số lượng
+      // Cập nhật current_price (giá 1 đơn vị)
+      await PortfolioService.updateCurrentPrice(categoryId, priceData.price, req.user.id);
+
+      // Tính giá trị mới = giá * số lượng (để trả về cho frontend)
       const quantity = parseFloat(holding.quantity) || 0;
       const newValue = quantity * priceData.price;
-
-      // Cập nhật current_value
-      await PortfolioService.updateCurrentValue(categoryId, newValue, req.user.id);
 
       return this.sendSuccess(res, {
         price: priceData.price,
@@ -109,12 +109,12 @@ class PriceController extends BaseController {
         return this.sendNotFound(res, 'Category holding not found');
       }
 
-      // Tính giá trị mới = giá * số lượng (giá vàng tính theo lượng)
+      // Cập nhật current_price (giá 1 đơn vị/lượng)
+      await PortfolioService.updateCurrentPrice(categoryId, priceData.price, req.user.id);
+
+      // Tính giá trị mới = giá * số lượng (để trả về cho frontend)
       const quantity = parseFloat(holding.quantity) || 0;
       const newValue = quantity * priceData.price;
-
-      // Cập nhật current_value
-      await PortfolioService.updateCurrentValue(categoryId, newValue, req.user.id);
 
       return this.sendSuccess(res, {
         price: priceData.price,
@@ -163,12 +163,12 @@ class PriceController extends BaseController {
         return this.sendNotFound(res, 'Category holding not found');
       }
 
-      // Tính giá trị mới = tỷ giá * số lượng USD
+      // Cập nhật current_price (tỷ giá 1 USD)
+      await PortfolioService.updateCurrentPrice(categoryId, priceData.price, req.user.id);
+
+      // Tính giá trị mới = tỷ giá * số lượng USD (để trả về cho frontend)
       const quantity = parseFloat(holding.quantity) || 0;
       const newValue = quantity * priceData.price;
-
-      // Cập nhật current_value
-      await PortfolioService.updateCurrentValue(categoryId, newValue, req.user.id);
 
       return this.sendSuccess(res, {
         price: priceData.price,

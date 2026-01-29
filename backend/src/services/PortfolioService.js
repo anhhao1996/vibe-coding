@@ -17,6 +17,7 @@ class PortfolioService {
       holdings: holdings,
       summary: {
         total_invested: parseFloat(totals.total_invested) || 0,
+        total_sold: parseFloat(totals.total_sold) || 0,
         total_value: parseFloat(totals.total_value) || 0,
         total_pnl: parseFloat(totals.total_pnl) || 0,
         total_pnl_percentage: parseFloat(totals.total_pnl_percentage) || 0
@@ -61,21 +62,14 @@ class PortfolioService {
     return await PortfolioSnapshot.getPortfolioHistory(days, userId);
   }
 
-  async updateCurrentValue(categoryId, currentValue, userId) {
+  async updateCurrentPrice(categoryId, currentPrice, userId) {
     // Kiểm tra category thuộc về user
     const belongsToUser = await Category.belongsToUser(categoryId, userId);
     if (!belongsToUser) {
       throw new Error('Category not found');
     }
 
-    const holding = await Holding.findByCategory(categoryId);
-    if (!holding) {
-      throw new Error('Holding not found for this category');
-    }
-
-    return await Holding.update(holding.id, {
-      current_value: currentValue
-    });
+    return await Holding.updateCurrentPrice(categoryId, currentPrice);
   }
 
   async createDailySnapshot(userId) {
@@ -90,6 +84,7 @@ class PortfolioService {
         {
           total_value: holding.current_value,
           total_invested: holding.total_invested,
+          total_sold: holding.total_sold || 0,
           pnl: holding.pnl,
           pnl_percentage: holding.pnl_percentage
         }
