@@ -74,29 +74,27 @@ class ExternalPriceService {
    * Lấy giá vàng SJC từ vnappmob API
    */
   async getGoldPrice() {
-    const url = 'https://api.vnappmob.com/api/v2/gold/sjc';
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Njk4NTY0NDYsImlhdCI6MTc2ODU2MDQ0Niwic2NvcGUiOiJnb2xkIiwicGVybWlzc2lvbiI6MH0.IYX73j1nf70fWiMbshAlYhUBZbMxatzaDu-_aPgX-kM';
+    const url = 'https://www.vang.today/api/prices?type=SJL1L10';
 
     try {
       const response = await axiosInstance.get(url, {
         headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Accept': 'application/json'
         }
       });
 
       const data = response.data;
       
-      // Lấy giá từ $.results[0].buy_1l
-      if (data.results && data.results.length > 0) {
-        const price = data.results[0].buy_1l;
-        const updated = data.results[0].updated || new Date().toISOString();
-        
+      // Lấy giá từ $.buy
+      if (data.buy) {
+        const price = data.buy;
+        const updated = new Date().toISOString();
+
         return {
           price: parseFloat(price),
           date: updated,
           type: 'SJC 1L',
-          source: 'vnappmob'
+          source: 'vang.today'
         };
       }
 
