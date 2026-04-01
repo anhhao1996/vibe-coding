@@ -10,12 +10,13 @@ const Holding = require('../models/Holding');
 
 class PriceController extends BaseController {
   /**
-   * Lấy giá DCDS từ Dragon Capital
+   * Lấy giá quỹ Fmarket theo slug URL (vd: dcds, dcbf)
    */
-  async getDCDSPrice(req, res) {
+  async getFmarketProductPrice(req, res) {
     try {
-      const priceData = await ExternalPriceService.getDCDSPrice();
-      return this.sendSuccess(res, priceData, 'DCDS price fetched successfully');
+      const { productSlug } = req.params;
+      const priceData = await ExternalPriceService.getFmarketProductPrice(productSlug);
+      return this.sendSuccess(res, priceData, 'Fmarket product price fetched successfully');
     } catch (error) {
       return this.handleError(res, error);
     }
@@ -35,20 +36,24 @@ class PriceController extends BaseController {
   }
 
   /**
-   * Lấy giá DCDS và tự động cập nhật cho category
+   * Lấy giá quỹ Fmarket và tự động cập nhật cho category
+   * Body/query: slug (mặc định dcds), ví dụ vesaf, dcbf
    */
-  async updateCategoryWithDCDSPrice(req, res) {
+  async updateCategoryWithFmarketPrice(req, res) {
     try {
       const { categoryId } = req.params;
-      
+      const slug =
+        req.body?.slug ??
+        req.query?.slug ??
+        'dcds';
+
       // Kiểm tra category thuộc về user
       const belongsToUser = await CategoryService.verifyCategoryOwnership(categoryId, req.user.id);
       if (!belongsToUser) {
         return this.sendNotFound(res, 'Category not found');
       }
       
-      // Lấy giá từ API
-      const priceData = await ExternalPriceService.getDCDSPrice();
+      const priceData = await ExternalPriceService.getFmarketProductPrice(slug);
       
       // Lấy holding của category
       const holding = await Holding.findByCategory(categoryId);
@@ -68,8 +73,10 @@ class PriceController extends BaseController {
         date: priceData.date,
         quantity: quantity,
         newValue: newValue,
-        source: priceData.source
-      }, 'Category value updated with DCDS price');
+        source: priceData.source,
+        fundSlug: priceData.fundSlug,
+        fundCode: priceData.fundCode
+      }, 'Category value updated with Fmarket fund price');
     } catch (error) {
       return this.handleError(res, error);
     }

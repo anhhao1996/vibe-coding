@@ -1,7 +1,7 @@
 /**
- * Sửa FK của portfolio_snapshots khi bị trỏ nhầm sang database khác (vd: test.categories từ TiDB)
- * chạy: node src/database/migrate-fix-portfolio-snapshot-fk.js
- * Toàn bộ FK: ưu tiên migrate-fix-all-cross-schema-fks.js (npm run db:fix-cross-schema-fks)
+ * Sửa FK categories.user_id khi bị trỏ nhầm sang database khác (vd: test.users trên TiDB)
+ * Chạy: node src/database/migrate-fix-categories-user-fk.js
+ * Toàn bộ FK: ưu tiên `migrate-fix-all-cross-schema-fks.js` (npm run db:fix-cross-schema-fks)
  */
 const path = require('path');
 const mysql = require('mysql2/promise');
@@ -26,25 +26,30 @@ async function main() {
 
   const [fks] = await connection.query(
     `SELECT CONSTRAINT_NAME
-     FROM information_schema.TABLE_CONSTRAINTS
+     FROM information_schema.KEY_COLUMN_USAGE
      WHERE TABLE_SCHEMA = ?
-       AND TABLE_NAME = 'portfolio_snapshots'
-       AND CONSTRAINT_TYPE = 'FOREIGN KEY'`,
+       AND TABLE_NAME = 'categories'
+       AND COLUMN_NAME = 'user_id'
+       AND REFERENCED_TABLE_NAME IS NOT NULL`,
     [dbName]
   );
 
   for (const row of fks) {
     const name = row.CONSTRAINT_NAME;
-    await connection.query(`ALTER TABLE portfolio_snapshots DROP FOREIGN KEY \`${name}\``);
+    await connection.query(`ALTER TABLE categories DROP FOREIGN KEY \`${name}\``);
     console.log(`✓ Dropped FK: ${name}`);
   }
 
+  if (fks.length === 0) {
+    console.log('ℹ No user_id FK on categories (already fixed or missing).');
+  }
+
   await connection.query(`
-    ALTER TABLE portfolio_snapshots
-    ADD CONSTRAINT portfolio_snapshots_category_fk
-    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+    ALTER TABLE categories
+    ADD CONSTRAINT categories_user_id_fk
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
   `);
-  console.log('✓ Added FK: portfolio_snapshots.category_id → categories(id)');
+  console.log('✓ Added FK: categories.user_id → users(id)');
 
   await connection.end();
   console.log('\n✅ Done.');

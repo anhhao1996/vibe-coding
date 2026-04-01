@@ -41,6 +41,12 @@ class DatabaseConfig {
     return results;
   }
 
+  /** Lấy connection từ pool (dùng cho transaction: beginTransaction / commit / rollback) */
+  async getConnection() {
+    const pool = await this.getPool();
+    return pool.getConnection();
+  }
+
   async close() {
     if (this.pool) {
       await this.pool.end();

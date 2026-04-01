@@ -4,7 +4,7 @@
  * Single Responsibility: Business logic cho categories
  */
 const Category = require('../models/Category');
-const Holding = require('../models/Holding');
+const db = require('../config/database');
 
 class CategoryService {
   async getAllCategories(userId) {
@@ -26,23 +26,30 @@ class CategoryService {
       throw new Error('Category with this name already exists');
     }
 
-    const category = await Category.create({
-      user_id: userId,
-      name: data.name,
-      description: data.description || null,
-      color: data.color || '#4CAF50'
-    });
+    const connection = await db.getConnection();
+    try {
+      await connection.beginTransaction();
 
-    // Tạo holding record mặc định
-    await Holding.create({
-      category_id: category.id,
-      quantity: 0,
-      average_price: 0,
-      total_invested: 0,
-      current_value: 0
-    });
+      const [insertCat] = await connection.query(
+        `INSERT INTO categories (user_id, name, description, color) VALUES (?, ?, ?, ?)`,
+        [userId, data.name, data.description || null, data.color || '#4CAF50']
+      );
+      const categoryId = insertCat.insertId;
 
-    return category;
+      await connection.query(
+        `INSERT INTO holdings (category_id, quantity, average_price, total_invested, current_value)
+         VALUES (?, 0, 0, 0, 0)`,
+        [categoryId]
+      );
+
+      await connection.commit();
+      return await Category.findById(categoryId);
+    } catch (err) {
+      await connection.rollback();
+      throw err;
+    } finally {
+      connection.release();
+    }
   }
 
   async updateCategory(id, data, userId) {

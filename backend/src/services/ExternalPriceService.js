@@ -5,7 +5,9 @@
 const axios = require('axios');
 const https = require('https');
 
-// Tạo axios instance bỏ qua SSL verification (cho Dragon Capital)
+const FMARKET_PRODUCT_BASE = 'https://api.fmarket.vn/home/product';
+
+// Tạo axios instance bỏ qua SSL verification (cho Dragon Capital và các API khác)
 const axiosInstance = axios.create({
   httpsAgent: new https.Agent({
     rejectUnauthorized: false
@@ -15,58 +17,61 @@ const axiosInstance = axios.create({
 
 class ExternalPriceService {
   /**
-   * Lấy giá DCDS từ Dragon Capital API
+   * Lấy giá quỹ từ Fmarket API: GET https://api.fmarket.vn/home/product/{slug}
+   * @param {string} productSlug - slug trên URL (vd: dcds, dcbf, dcip)
    */
-  async getDCDSPrice() {
-    const now = new Date();
-    const endDate = now.toISOString();
-    
-    // 3 ngày trước
-    const startDate = new Date(now);
-    startDate.setDate(startDate.getDate() - 3);
-    const startDateStr = startDate.toISOString().split('T')[0];
+  async getFmarketProductPrice(productSlug) {
+    const slug = String(productSlug || '')
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, '');
+    if (!slug) {
+      throw new Error('Invalid product slug');
+    }
 
-    const params = {
-      endDateIsoString: endDate,
-      fundCode: "VF1",
-      fundReportCode: "DCDS",
-      orderBy: "navDate__c",
-      orderDirection: "desc",
-      pageNumber: 1,
-      pageSize: 30,
-      siteId: "0DMJ2000000oLukOAE",
-      startDateIsoString: startDateStr
-    };
-
-    const url = `https://www.dragoncapital.com.vn/individual/vi/webruntime/api/apex/execute?cacheable=true&classname=%40udd%2F01pJ2000000CgSu&isContinuation=false&method=getFundRelatedDataByDateRange&namespace=&params=${encodeURIComponent(JSON.stringify(params))}&language=vi&asGuest=true&htmlEncode=false`;
+    const url = `${FMARKET_PRODUCT_BASE}/${encodeURIComponent(slug)}`;
 
     try {
-      const response = await axiosInstance.get(url, {
+      const response = await axios.get(url, {
         headers: {
-          'Accept': 'application/json',
-          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
-        }
+          Accept: 'application/json',
+          'User-Agent':
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+        },
+        timeout: 15000
       });
 
-      const data = response.data;
-      
-      // Lấy giá từ $.returnValue[0].navPerShare__c
-      if (data.returnValue && data.returnValue.length > 0) {
-        const price = data.returnValue[0].navPerShare__c;
-        const navDate = data.returnValue[0].navDate__c;
-        
-        return {
-          price: parseFloat(price),
-          date: navDate,
-          fundCode: 'DCDS',
-          source: 'Dragon Capital'
-        };
+      const body = response.data;
+      if (body.status !== 200 || body.code !== 200 || !body.data) {
+        throw new Error(body.message || 'No product data from Fmarket');
       }
 
-      throw new Error('No price data found in response');
+      const d = body.data;
+      const nav = d.nav != null ? parseFloat(d.nav) : NaN;
+      if (Number.isNaN(nav)) {
+        throw new Error('NAV not found in Fmarket response');
+      }
+
+      let dateStr;
+      if (d.extra?.lastNAVDate != null) {
+        dateStr = new Date(d.extra.lastNAVDate).toISOString();
+      } else if (d.productTradingSession?.tradingTimeString) {
+        dateStr = d.productTradingSession.tradingTimeString;
+      } else {
+        dateStr = new Date().toISOString();
+      }
+
+      return {
+        price: nav,
+        date: dateStr,
+        fundCode: d.shortName || slug.toUpperCase(),
+        fundSlug: slug,
+        source: 'Fmarket'
+      };
     } catch (error) {
-      console.error('Error fetching DCDS price:', error.message);
-      throw new Error(`Failed to fetch DCDS price: ${error.message}`);
+      const msg = error.response?.data?.message || error.message;
+      console.error(`Error fetching Fmarket product "${slug}":`, msg);
+      throw new Error(`Failed to fetch Fmarket price (${slug}): ${msg}`);
     }
   }
 
@@ -149,11 +154,17 @@ class ExternalPriceService {
 
   /**
    * Lấy giá theo fund code
+   * Quỹ Fmarket: có thể truyền mã như DCDS hoặc slug URL (dcds, dcbf, …)
    */
   async getPriceByFundCode(fundCode) {
-    switch (fundCode.toUpperCase()) {
+    const raw = String(fundCode || '').trim();
+    const upper = raw.toUpperCase();
+
+    switch (upper) {
       case 'DCDS':
-        return await this.getDCDSPrice();
+        return await this.getFmarketProductPrice('dcds');
+      case 'VESAF':
+        return await this.getFmarketProductPrice('vesaf');
       case 'GOLD':
       case 'VÀNG':
       case 'SJC':
@@ -162,8 +173,13 @@ class ExternalPriceService {
       case 'ĐÔ LA':
       case 'ĐÔ LA MỸ':
         return await this.getUSDPrice();
-      default:
+      default: {
+        const slug = raw.toLowerCase();
+        if (/^[a-z0-9-]+$/.test(slug)) {
+          return await this.getFmarketProductPrice(slug);
+        }
         throw new Error(`Unsupported fund code: ${fundCode}`);
+      }
     }
   }
 }
