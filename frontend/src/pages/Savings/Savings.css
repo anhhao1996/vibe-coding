@@ -1,0 +1,442 @@
+/* Savings Page Styles */
+.savings-page {
+  animation: fadeIn var(--transition-normal) forwards;
+}
+
+/* Summary Cards */
+.savings-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.summary-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  transition: all var(--transition-normal);
+}
+
+.summary-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.summary-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.summary-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.summary-label {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.summary-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Grid */
+.savings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: var(--spacing-lg);
+  align-items: stretch;
+}
+
+/* Card */
+.savings-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.savings-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--savings-color, #2196F3);
+}
+
+.savings-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.savings-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+}
+
+.savings-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.savings-color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.savings-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.savings-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.savings-description {
+  padding: 0 var(--spacing-lg);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin: 0;
+  margin-bottom: var(--spacing-md);
+}
+
+.savings-stats {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--bg-tertiary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.savings-stats .stat-row.highlight {
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.08) 0%, rgba(33, 150, 243, 0.15) 100%);
+  margin: var(--spacing-xs) calc(-1 * var(--spacing-lg));
+  padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+.savings-stats .interest-row {
+  padding-top: var(--spacing-sm);
+  border-top: 1px dashed var(--border-light);
+  margin-top: var(--spacing-xs);
+}
+
+.interest-value {
+  color: #2E7D32 !important;
+}
+
+.withdrawn-value {
+  color: #C62828 !important;
+}
+
+.savings-card-footer {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.savings-card-footer .btn {
+  flex: 1;
+}
+
+/* Form Styles */
+.savings-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.color-picker-row {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.color-option {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.color-option:hover {
+  transform: scale(1.15);
+}
+
+.color-option.active {
+  border-color: var(--text-primary);
+  box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px var(--text-primary);
+}
+
+.form-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* Transaction Type Selector */
+.tx-type-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-sm);
+}
+
+.tx-type-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--spacing-md) var(--spacing-sm);
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all var(--transition-fast);
+  color: var(--text-primary);
+}
+
+.tx-type-btn span:first-child {
+  font-size: 1.5rem;
+}
+
+.tx-type-btn:hover {
+  border-color: var(--primary-300);
+  background: var(--bg-tertiary);
+}
+
+.tx-type-btn.active.type-deposit {
+  border-color: #2196F3;
+  background: rgba(33, 150, 243, 0.1);
+  color: #1565C0;
+}
+
+.tx-type-btn.active.type-withdrawal {
+  border-color: #F44336;
+  background: rgba(244, 67, 54, 0.1);
+  color: #C62828;
+}
+
+.tx-type-btn.active.type-interest {
+  border-color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+  color: #2E7D32;
+}
+
+/* Detail Modal */
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.detail-summary {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.detail-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9375rem;
+}
+
+.detail-balance {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1565C0;
+}
+
+.detail-section-title {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-primary);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.no-transactions {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--text-muted);
+}
+
+/* Transactions List */
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  background: var(--bg-card);
+  transition: all var(--transition-fast);
+}
+
+.transaction-item:hover {
+  background: var(--bg-tertiary);
+}
+
+.transaction-item.type-deposit {
+  border-left: 3px solid #2196F3;
+}
+
+.transaction-item.type-withdrawal {
+  border-left: 3px solid #F44336;
+}
+
+.transaction-item.type-interest {
+  border-left: 3px solid #4CAF50;
+}
+
+.tx-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 0;
+}
+
+.tx-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.tx-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.tx-type-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.tx-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.tx-rate {
+  font-size: 0.75rem;
+  color: #1565C0;
+  font-weight: 500;
+}
+
+.tx-notes {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.tx-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}
+
+.tx-amount {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.tx-delete-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+  opacity: 0;
+}
+
+.transaction-item:hover .tx-delete-btn {
+  opacity: 1;
+}
+
+.tx-delete-btn:hover {
+  background: var(--error-light);
+  color: #C62828;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .savings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .savings-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tx-type-selector {
+    grid-template-columns: 1fr;
+  }
+
+  .tx-notes {
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .savings-summary {
+    grid-template-columns: 1fr;
+  }
+}

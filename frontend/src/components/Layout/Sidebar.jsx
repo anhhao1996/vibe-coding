@@ -13,6 +13,7 @@ const Sidebar = () => {
     { path: '/', label: 'Dashboard', icon: '📊' },
     { path: '/investments', label: 'Đầu tư', icon: '💰' },
     { path: '/transactions', label: 'Giao dịch', icon: '📝' },
+    { path: '/savings', label: 'Tiết kiệm', icon: '🏦' },
     { path: '/expenses', label: 'Chi tiêu', icon: '💸' }
   ];
 

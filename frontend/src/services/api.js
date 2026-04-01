@@ -12,7 +12,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json'
   },
-  timeout: 10000
+  timeout: 20000
 });
 
 // Response interceptor for error handling
@@ -86,6 +86,18 @@ export const expenseApi = {
   deleteItem: (id) => api.delete(`/expenses/items/${id}`),
   copyFromMonth: (sourceMonth, targetMonth) => api.post('/expenses/copy', { sourceMonth, targetMonth }),
   deleteMonth: (month) => api.delete(`/expenses/month/${month}`)
+};
+
+// Savings API - Quản lý tiết kiệm
+export const savingsApi = {
+  getAll: () => api.get('/savings'),
+  getById: (id) => api.get(`/savings/${id}`),
+  create: (data) => api.post('/savings', data),
+  update: (id, data) => api.put(`/savings/${id}`, data),
+  delete: (id) => api.delete(`/savings/${id}`),
+  addTransaction: (bookId, data) => api.post(`/savings/${bookId}/transactions`, data),
+  updateTransaction: (id, data) => api.put(`/savings/transactions/${id}`, data),
+  deleteTransaction: (id) => api.delete(`/savings/transactions/${id}`)
 };
 
 export default api;

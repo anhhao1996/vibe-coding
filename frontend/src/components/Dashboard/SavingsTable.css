@@ -1,5 +1,5 @@
-/* PnL Table Styles */
-.pnl-table-container {
+/* Savings Table Styles */
+.savings-table-container {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
@@ -7,7 +7,7 @@
   overflow: hidden;
 }
 
-.pnl-table-header {
+.savings-table-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,29 +16,29 @@
   background: var(--bg-tertiary);
 }
 
-.pnl-table-title {
+.savings-table-title {
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
 }
 
-.pnl-table-total {
+.savings-table-total {
   font-size: 1.125rem;
   font-weight: 700;
   color: #1565C0;
 }
 
-.pnl-table-body {
+.savings-table-body {
   overflow-x: auto;
 }
 
-.pnl-table {
+.savings-overview-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.pnl-table th {
+.savings-overview-table th {
   padding: var(--spacing-md);
   font-size: 0.75rem;
   font-weight: 600;
@@ -50,67 +50,60 @@
   white-space: nowrap;
 }
 
-.pnl-table td {
+.savings-overview-table td {
   padding: var(--spacing-md);
   border-bottom: 1px solid var(--border-light);
   font-size: 0.9375rem;
   vertical-align: middle;
 }
 
-.pnl-table tr:last-child td {
+.savings-overview-table tr:last-child td {
   border-bottom: none;
 }
 
-.pnl-table tr:hover td {
+.savings-overview-table tbody tr:hover td {
   background: var(--bg-tertiary);
 }
 
-.category-cell {
+.savings-name-cell {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
 }
 
-.category-color {
+.savings-dot {
   width: 10px;
   height: 10px;
-  border-radius: var(--radius-full);
+  border-radius: 50%;
   flex-shrink: 0;
 }
 
-.category-name {
+.savings-book-name {
   font-weight: 500;
   color: var(--text-primary);
 }
 
-.pnl-badge {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  font-family: 'JetBrains Mono', monospace;
+.savings-interest {
+  color: #2E7D32 !important;
 }
 
-.pnl-badge.profit {
-  background: var(--success-light);
-  color: var(--primary-800);
+.savings-withdrawn {
+  color: #C62828 !important;
 }
 
-.pnl-badge.loss {
-  background: var(--error-light);
-  color: #C62828;
+.savings-balance-val {
+  color: #1565C0 !important;
+  font-weight: 600 !important;
 }
 
-.pnl-total-row td {
+.savings-total-row td {
   border-top: 2px solid var(--border-light);
   background: var(--bg-tertiary);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
-  .pnl-table th,
-  .pnl-table td {
+  .savings-overview-table th,
+  .savings-overview-table td {
     padding: var(--spacing-sm);
     font-size: 0.8125rem;
   }

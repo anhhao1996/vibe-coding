@@ -24,10 +24,17 @@ const PnLTable = ({ data = [] }) => {
     Math.abs(parseFloat(b.pnl) || 0) - Math.abs(parseFloat(a.pnl) || 0)
   );
 
+  const totalInvested = data.reduce((sum, item) => sum + (parseFloat(item.total_invested) || 0), 0);
+  const totalValue = data.reduce((sum, item) => sum + (parseFloat(item.current_value) || 0), 0);
+  const totalPnl = data.reduce((sum, item) => sum + (parseFloat(item.pnl) || 0), 0);
+  const totalPnlPct = totalInvested > 0 ? (totalPnl / totalInvested) * 100 : 0;
+  const totalPnlClass = getPnlClass(totalPnl);
+
   return (
     <div className="pnl-table-container">
       <div className="pnl-table-header">
         <h3 className="pnl-table-title">📋 Chi tiết Lời/Lỗ</h3>
+        <span className="pnl-table-total number">{formatCurrency(totalValue)}</span>
       </div>
       <div className="pnl-table-body">
         <table className="pnl-table">
@@ -79,6 +86,19 @@ const PnLTable = ({ data = [] }) => {
               );
             })}
           </tbody>
+          <tfoot>
+            <tr className="pnl-total-row">
+              <td><strong>TỔNG CỘNG</strong></td>
+              <td className="text-right number"><strong>{formatCurrency(totalInvested)}</strong></td>
+              <td className="text-right number"><strong>{formatCurrency(totalValue)}</strong></td>
+              <td className={`text-right number ${totalPnlClass}`}><strong>{formatCurrency(totalPnl)}</strong></td>
+              <td className={`text-right ${totalPnlClass}`}>
+                <span className={`pnl-badge ${totalPnlClass}`}>
+                  {formatPercentage(totalPnlPct)}
+                </span>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>

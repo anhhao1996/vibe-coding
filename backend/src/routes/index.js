@@ -12,6 +12,7 @@ const transactionRoutes = require('./transactionRoutes');
 const portfolioRoutes = require('./portfolioRoutes');
 const priceRoutes = require('./priceRoutes');
 const expenseRoutes = require('./expenseRoutes');
+const savingsRoutes = require('./savingsRoutes');
 
 // Health check
 router.get('/health', (req, res) => {
@@ -27,5 +28,6 @@ router.use('/transactions', authMiddleware, transactionRoutes);
 router.use('/portfolio', authMiddleware, portfolioRoutes);
 router.use('/price', authMiddleware, priceRoutes);
 router.use('/expenses', authMiddleware, expenseRoutes);
+router.use('/savings', authMiddleware, savingsRoutes);
 
 module.exports = router;

@@ -2,8 +2,11 @@
  * Database Migration Script
  * Tạo các tables cần thiết cho ứng dụng
  */
+const path = require('path');
 const mysql = require('mysql2/promise');
-require('dotenv').config();
+
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env';
+require('dotenv').config({ path: path.resolve(__dirname, '../../', envFile) });
 
 const migrations = [
   // Categories table - Danh mục đầu tư
@@ -78,6 +81,31 @@ const migrations = [
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (monthly_expense_id) REFERENCES monthly_expenses(id) ON DELETE CASCADE
+  )`,
+
+  // Savings books - Sổ tiết kiệm
+  `CREATE TABLE IF NOT EXISTS savings_books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    color VARCHAR(7) DEFAULT '#2196F3',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  )`,
+
+  // Savings transactions - Giao dịch tiết kiệm (nạp/rút/lãi)
+  `CREATE TABLE IF NOT EXISTS savings_transactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    savings_book_id INT NOT NULL,
+    type ENUM('deposit', 'withdrawal', 'interest') NOT NULL,
+    amount DECIMAL(15, 2) NOT NULL,
+    interest_rate DECIMAL(8, 4) DEFAULT NULL,
+    transaction_date DATE NOT NULL,
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (savings_book_id) REFERENCES savings_books(id) ON DELETE CASCADE
   )`
 ];
 

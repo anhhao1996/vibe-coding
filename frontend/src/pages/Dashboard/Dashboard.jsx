@@ -7,13 +7,17 @@ import {
   PortfolioBarChart, 
   PortfolioLineChart, 
   PnL7Days, 
-  PnLTable 
+  PnLTable,
+  NetWorthCard,
+  AssetAllocationChart,
+  SavingsTable
 } from '../../components/Dashboard';
-import { portfolioApi, categoryApi, priceApi } from '../../services/api';
+import { portfolioApi, categoryApi, priceApi, savingsApi } from '../../services/api';
 import './Dashboard.css';
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
+  const [savingsBooks, setSavingsBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [savingSnapshot, setSavingSnapshot] = useState(false);
@@ -23,8 +27,12 @@ const Dashboard = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await portfolioApi.getDashboard();
-      setDashboardData(response.data);
+      const [dashResponse, savingsResponse] = await Promise.all([
+        portfolioApi.getDashboard(),
+        savingsApi.getAll()
+      ]);
+      setDashboardData(dashResponse.data);
+      setSavingsBooks(savingsResponse.data || []);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -133,12 +141,18 @@ const Dashboard = () => {
 
   const { overview, distribution, pnlByCategory, pnl7Days, portfolioHistory } = dashboardData || {};
 
+  const investmentValue = parseFloat(overview?.total_value) || 0;
+  const investmentPnl = parseFloat(overview?.total_pnl) || 0;
+  const savingsBalance = savingsBooks.reduce((sum, b) => sum + parseFloat(b.balance || 0), 0);
+  const savingsInterest = savingsBooks.reduce((sum, b) => sum + parseFloat(b.total_interest || 0), 0);
+  const savingsDeposited = savingsBooks.reduce((sum, b) => sum + parseFloat(b.total_deposited || 0), 0);
+
   return (
     <div className="dashboard">
       <div className="page-header">
         <div>
           <h1 className="page-title">📊 Dashboard</h1>
-          <p className="page-subtitle">Tổng quan danh mục đầu tư của bạn</p>
+          <p className="page-subtitle">Tổng quan tài sản của bạn</p>
         </div>
         <div className="header-actions">
           <button 
@@ -158,8 +172,17 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Stats Overview */}
+      {/* Net Worth Hero Card */}
+      <NetWorthCard
+        investmentValue={investmentValue}
+        savingsBalance={savingsBalance}
+        investmentPnl={investmentPnl}
+        savingsInterest={savingsInterest}
+      />
+
+      {/* Investment Stats */}
       <section className="stats-section">
+        <h3 className="section-label">💰 Đầu tư</h3>
         <div className="stats-grid">
           <StatCard
             title="Tổng đầu tư"
@@ -181,7 +204,7 @@ const Dashboard = () => {
             type="currency"
           />
           <StatCard
-            title="Lãi/Lỗ"
+            title="Lãi/Lỗ đầu tư"
             value={overview?.total_pnl || 0}
             icon={overview?.total_pnl >= 0 ? "📈" : "📉"}
             type="currency"
@@ -192,18 +215,51 @@ const Dashboard = () => {
         </div>
       </section>
 
+      {/* Savings Stats */}
+      {savingsBooks.length > 0 && (
+        <section className="stats-section">
+          <h3 className="section-label">🏦 Tiết kiệm</h3>
+          <div className="stats-grid stats-grid-3">
+            <StatCard
+              title="Tổng số dư"
+              value={savingsBalance}
+              icon="🏦"
+              type="currency"
+              colorClass="savings"
+            />
+            <StatCard
+              title="Tổng đã nạp"
+              value={savingsDeposited}
+              icon="📥"
+              type="currency"
+            />
+            <StatCard
+              title="Lãi đã nhận"
+              value={savingsInterest}
+              icon="📈"
+              type="currency"
+              colorClass="profit"
+            />
+          </div>
+        </section>
+      )}
+
       {/* Charts Section */}
       <section className="charts-section">
         <div className="charts-grid">
-          <PortfolioBarChart data={distribution} />
+          <AssetAllocationChart investments={distribution || []} />
+          <PortfolioBarChart data={savingsBooks} />
           <PnL7Days data={pnl7Days} />
           <PortfolioLineChart data={portfolioHistory} days={30} />
         </div>
       </section>
 
-      {/* PnL Details Table */}
-      <section className="table-section">
-        <PnLTable data={pnlByCategory} />
+      {/* Tables Section */}
+      <section className="tables-section">
+        <div className="tables-grid">
+          <PnLTable data={pnlByCategory} />
+          <SavingsTable data={savingsBooks} />
+        </div>
       </section>
     </div>
   );

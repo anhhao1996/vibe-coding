@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import Investments from './pages/Investments';
 import Transactions from './pages/Transactions';
 import Expenses from './pages/Expenses';
+import Savings from './pages/Savings';
 import Login from './pages/Login';
 
 // Protected Route Component
@@ -75,6 +76,7 @@ const AppRoutes = () => {
                 <Route path="/investments" element={<Investments />} />
                 <Route path="/transactions" element={<Transactions />} />
                 <Route path="/expenses" element={<Expenses />} />
+                <Route path="/savings" element={<Savings />} />
               </Routes>
             </Layout>
           </ProtectedRoute>
