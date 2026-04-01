@@ -260,6 +260,18 @@ a:hover {
   transform: translateY(-1px);
 }
 
+.btn-vesaf {
+  background: linear-gradient(135deg, #00897B 0%, #00695C 100%);
+  color: var(--text-inverse);
+  box-shadow: 0 2px 8px rgba(0, 105, 92, 0.35);
+}
+
+.btn-vesaf:hover:not(:disabled) {
+  background: linear-gradient(135deg, #00796B 0%, #004D40 100%);
+  box-shadow: 0 4px 12px rgba(0, 105, 92, 0.45);
+  transform: translateY(-1px);
+}
+
 .btn-gold {
   background: linear-gradient(135deg, #FFD700 0%, #FFC107 100%);
   color: #5D4E37;

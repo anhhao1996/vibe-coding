@@ -58,6 +58,10 @@ const Dashboard = () => {
     return categoryName?.toUpperCase().includes('DCDS');
   };
 
+  const isVESAFCategory = (categoryName) => {
+    return categoryName?.toUpperCase().includes('VESAF');
+  };
+
   const isGoldCategory = (categoryName) => {
     const name = categoryName?.toUpperCase() || '';
     return name.includes('VÀNG') || name.includes('VANG') || name.includes('GOLD') || name.includes('SJC');
@@ -82,8 +86,10 @@ const Dashboard = () => {
         if (parseFloat(category.quantity) <= 0) continue;
 
         try {
-          if (isDCDSCategory(category.name)) {
-            await priceApi.updateCategoryWithDCDS(category.id);
+          if (isVESAFCategory(category.name)) {
+            await priceApi.updateCategoryWithFmarket(category.id, 'vesaf');
+          } else if (isDCDSCategory(category.name)) {
+            await priceApi.updateCategoryWithFmarket(category.id, 'dcds');
           } else if (isGoldCategory(category.name)) {
             await priceApi.updateCategoryWithGold(category.id);
           } else if (isUSDCategory(category.name)) {

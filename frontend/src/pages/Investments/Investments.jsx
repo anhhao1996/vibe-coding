@@ -40,6 +40,7 @@ const Investments = () => {
   const [displayPrice, setDisplayPrice] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [fetchingDCDS, setFetchingDCDS] = useState(null); // categoryId đang fetch
+  const [fetchingVESAF, setFetchingVESAF] = useState(null); // categoryId đang fetch VESAF
   const [fetchingGold, setFetchingGold] = useState(null); // categoryId đang fetch giá vàng
   const [fetchingUSD, setFetchingUSD] = useState(null); // categoryId đang fetch giá USD
   const [updatingAll, setUpdatingAll] = useState(false); // Đang cập nhật toàn bộ
@@ -176,11 +177,11 @@ const Investments = () => {
     }
   };
 
-  // Lấy giá DCDS từ Dragon Capital API
+  // Lấy giá DCDS từ Fmarket (slug dcds)
   const fetchDCDSPrice = async (categoryId) => {
     setFetchingDCDS(categoryId);
     try {
-      const response = await priceApi.updateCategoryWithDCDS(categoryId);
+      const response = await priceApi.updateCategoryWithFmarket(categoryId, 'dcds');
       const data = response.data;
       alert(`✅ Đã cập nhật giá DCDS!\n\nGiá: ${formatCurrency(data.price)}\nNgày: ${data.date}\nGiá trị mới: ${formatCurrency(data.newValue)}`);
       fetchCategories();
@@ -188,6 +189,21 @@ const Investments = () => {
       alert('❌ Lỗi lấy giá DCDS: ' + err.message);
     } finally {
       setFetchingDCDS(null);
+    }
+  };
+
+  // Lấy giá VESAF từ Fmarket (slug vesaf)
+  const fetchVESAFPrice = async (categoryId) => {
+    setFetchingVESAF(categoryId);
+    try {
+      const response = await priceApi.updateCategoryWithFmarket(categoryId, 'vesaf');
+      const data = response.data;
+      alert(`✅ Đã cập nhật giá VESAF!\n\nGiá: ${formatCurrency(data.price)}\nNgày: ${data.date}\nGiá trị mới: ${formatCurrency(data.newValue)}`);
+      fetchCategories();
+    } catch (err) {
+      alert('❌ Lỗi lấy giá VESAF: ' + err.message);
+    } finally {
+      setFetchingVESAF(null);
     }
   };
 
@@ -209,6 +225,10 @@ const Investments = () => {
   // Kiểm tra category có phải DCDS không
   const isDCDSCategory = (categoryName) => {
     return categoryName?.toUpperCase().includes('DCDS');
+  };
+
+  const isVESAFCategory = (categoryName) => {
+    return categoryName?.toUpperCase().includes('VESAF');
   };
 
   // Kiểm tra category có phải Vàng không
@@ -256,8 +276,11 @@ const Investments = () => {
       }
 
       try {
-        if (isDCDSCategory(category.name)) {
-          await priceApi.updateCategoryWithDCDS(category.id);
+        if (isVESAFCategory(category.name)) {
+          await priceApi.updateCategoryWithFmarket(category.id, 'vesaf');
+          results.success.push(`${category.name} (VESAF)`);
+        } else if (isDCDSCategory(category.name)) {
+          await priceApi.updateCategoryWithFmarket(category.id, 'dcds');
           results.success.push(`${category.name} (DCDS)`);
         } else if (isGoldCategory(category.name)) {
           await priceApi.updateCategoryWithGold(category.id);
@@ -433,7 +456,15 @@ const Investments = () => {
                 </div>
 
                 <div className="category-card-footer">
-                  {isDCDSCategory(category.name) ? (
+                  {isVESAFCategory(category.name) ? (
+                    <button
+                      className="btn btn-vesaf btn-sm"
+                      onClick={() => fetchVESAFPrice(category.id)}
+                      disabled={fetchingVESAF === category.id || parseFloat(category.quantity) <= 0}
+                    >
+                      {fetchingVESAF === category.id ? '⏳ Đang lấy...' : '🏦 Lấy giá VESAF'}
+                    </button>
+                  ) : isDCDSCategory(category.name) ? (
                     <button 
                       className="btn btn-dcds btn-sm"
                       onClick={() => fetchDCDSPrice(category.id)}

@@ -59,11 +59,14 @@ export const portfolioApi = {
 
 // External Price API
 export const priceApi = {
-  getDCDSPrice: () => api.get('/price/dcds'),
+  /** Giá quỹ Fmarket theo slug (vd: dcds, vesaf) */
+  getFmarketPrice: (productSlug) => api.get(`/price/fmarket/${encodeURIComponent(productSlug)}`),
   getGoldPrice: () => api.get('/price/gold'),
   getUSDPrice: () => api.get('/price/usd'),
   getPriceByFundCode: (fundCode) => api.get(`/price/fund/${fundCode}`),
-  updateCategoryWithDCDS: (categoryId) => api.post(`/price/dcds/update/${categoryId}`),
+  /** Cập nhật category theo NAV Fmarket; slug mặc định dcds */
+  updateCategoryWithFmarket: (categoryId, slug = 'dcds') =>
+    api.post(`/price/fmarket/update/${categoryId}`, { slug }),
   updateCategoryWithGold: (categoryId) => api.post(`/price/gold/update/${categoryId}`),
   updateCategoryWithUSD: (categoryId) => api.post(`/price/usd/update/${categoryId}`)
 };
