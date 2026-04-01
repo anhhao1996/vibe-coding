@@ -49,7 +49,8 @@ class PortfolioSnapshot extends BaseModel {
         COALESCE(inv.total_sold, 0) as total_sold,
         COALESCE(inv.total_pnl, 0) as total_pnl,
         COALESCE(inv.avg_pnl_percentage, 0) as avg_pnl_percentage,
-        COALESCE(ss.total_balance, 0) as savings_balance
+        COALESCE(ss.total_balance, 0) as savings_balance,
+        COALESCE(ss.total_deposited, 0) as savings_deposited
       FROM (
         SELECT DISTINCT snapshot_date FROM (
           SELECT ps.snapshot_date FROM ${this.tableName} ps

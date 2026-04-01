@@ -152,6 +152,7 @@ const Dashboard = () => {
   const savingsBalance = savingsBooks.reduce((sum, b) => sum + parseFloat(b.balance || 0), 0);
   const savingsInterest = savingsBooks.reduce((sum, b) => sum + parseFloat(b.total_interest || 0), 0);
   const savingsDeposited = savingsBooks.reduce((sum, b) => sum + parseFloat(b.total_deposited || 0), 0);
+  const savingsWithdrawn = savingsBooks.reduce((sum, b) => sum + parseFloat(b.total_withdrawn || 0), 0);
 
   return (
     <div className="dashboard">
@@ -225,7 +226,7 @@ const Dashboard = () => {
       {savingsBooks.length > 0 && (
         <section className="stats-section">
           <h3 className="section-label">🏦 Tiết kiệm</h3>
-          <div className="stats-grid stats-grid-3">
+          <div className="stats-grid stats-grid-savings">
             <StatCard
               title="Tổng số dư"
               value={savingsBalance}
@@ -238,6 +239,13 @@ const Dashboard = () => {
               value={savingsDeposited}
               icon="📥"
               type="currency"
+            />
+            <StatCard
+              title="Tổng rút ra"
+              value={savingsWithdrawn}
+              icon="📤"
+              type="currency"
+              colorClass="sold"
             />
             <StatCard
               title="Lãi đã nhận"

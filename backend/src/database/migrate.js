@@ -161,6 +161,15 @@ async function migrate() {
       if (e.code !== 'ER_DUP_FIELDNAME') throw e;
     }
 
+    try {
+      await connection.query(
+        `ALTER TABLE savings_snapshots ADD COLUMN total_deposited DECIMAL(15, 2) NOT NULL DEFAULT 0 AFTER total_interest`
+      );
+      console.log('✓ savings_snapshots.total_deposited column added');
+    } catch (e) {
+      if (e.code !== 'ER_DUP_FIELDNAME') throw e;
+    }
+
     console.log('\n✅ All migrations completed successfully!');
 
   } catch (error) {

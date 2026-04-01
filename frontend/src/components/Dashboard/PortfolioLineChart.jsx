@@ -9,24 +9,17 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
-  Area,
-  ComposedChart
+  ResponsiveContainer
 } from 'recharts';
 import { formatCurrency, shortenNumber, formatDate } from '../../utils/formatters';
 import './Charts.css';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
-    // Lọc bỏ các entry không có name hoặc name là "value" (từ Area)
-    const filteredPayload = payload.filter(entry => 
-      entry.name && entry.name !== 'value'
-    );
-    
     return (
       <div className="chart-tooltip">
         <p className="tooltip-label">{formatDate(label)}</p>
-        {filteredPayload.map((entry, index) => (
+        {payload.map((entry, index) => (
           <p key={index} className="tooltip-value" style={{ color: entry.color }}>
             <span>{entry.name}:</span>
             <span className="number">{formatCurrency(entry.value)}</span>
@@ -54,15 +47,16 @@ const PortfolioLineChart = ({ data = [], days = 30 }) => {
   }
 
   const chartData = data.map(item => {
+    const totalInvested = parseFloat(item.total_invested) || 0;
+    const savingsDeposited = parseFloat(item.savings_deposited) || 0;
     const totalValue = parseFloat(item.total_value) || 0;
-    const totalSold = parseFloat(item.total_sold) || 0;
-    const savings = parseFloat(item.savings_balance) || 0;
+    const savingsBalance = parseFloat(item.savings_balance) || 0;
     return {
       date: item.snapshot_date,
-      // Giá trị = Đầu tư (giá trị + đã bán) + tiết kiệm tại ngày snapshot
-      value: totalValue + totalSold + savings,
-      invested: parseFloat(item.total_invested) || 0,
-      pnl: parseFloat(item.total_pnl) || 0
+      // Tổng tiền đã nạp = Tổng đầu tư + Tổng đã nạp (tiết kiệm)
+      totalDeposited: totalInvested + savingsDeposited,
+      // Giá trị hiện tại = Giá trị hiện tại (đầu tư) + Tổng số dư (tiết kiệm)
+      currentValue: totalValue + savingsBalance
     };
   });
 
@@ -72,27 +66,21 @@ const PortfolioLineChart = ({ data = [], days = 30 }) => {
         <h3 className="chart-title">📈 Biến thiên tài sản ({days} ngày)</h3>
         <div className="chart-legend">
           <span className="legend-item">
-            <span className="legend-color" style={{ background: 'var(--primary-500)' }}></span>
-            Đầu tư + Tiết kiệm
+            <span className="legend-color" style={{ background: '#1976D2' }}></span>
+            Tổng tiền đã nạp
           </span>
           <span className="legend-item">
-            <span className="legend-color" style={{ background: '#1976D2' }}></span>
-            Đầu tư
+            <span className="legend-color" style={{ background: 'var(--primary-500)' }}></span>
+            Giá trị hiện tại
           </span>
         </div>
       </div>
       <div className="chart-body">
         <ResponsiveContainer width="100%" height={350}>
-          <ComposedChart
+          <LineChart
             data={chartData}
             margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
           >
-            <defs>
-              <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--primary-500)" stopOpacity={0.3}/>
-                <stop offset="95%" stopColor="var(--primary-500)" stopOpacity={0}/>
-              </linearGradient>
-            </defs>
             <CartesianGrid 
               strokeDasharray="3 3" 
               stroke="var(--border-light)"
@@ -112,33 +100,25 @@ const PortfolioLineChart = ({ data = [], days = 30 }) => {
               tickFormatter={shortenNumber}
             />
             <Tooltip content={<CustomTooltip />} />
-            <Area 
-              type="monotone"
-              dataKey="value"
-              stroke="var(--primary-500)"
-              fill="url(#colorValue)"
-              strokeWidth={0}
-              tooltipType="none"
+            <Line 
+              type="monotone" 
+              dataKey="totalDeposited" 
+              name="Tổng tiền đã nạp"
+              stroke="#1976D2" 
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ r: 6, fill: '#1976D2', stroke: '#fff', strokeWidth: 2 }}
             />
             <Line 
               type="monotone" 
-              dataKey="value" 
-              name="Tổng giá trị"
+              dataKey="currentValue" 
+              name="Giá trị hiện tại"
               stroke="var(--primary-500)" 
               strokeWidth={3}
               dot={false}
               activeDot={{ r: 6, fill: 'var(--primary-500)', stroke: '#fff', strokeWidth: 2 }}
             />
-            <Line 
-              type="monotone" 
-              dataKey="invested" 
-              name="Đầu tư"
-              stroke="#1976D2" 
-              strokeWidth={2}
-              strokeDasharray="5 5"
-              dot={false}
-            />
-          </ComposedChart>
+          </LineChart>
         </ResponsiveContainer>
       </div>
     </div>
