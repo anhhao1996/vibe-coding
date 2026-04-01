@@ -62,6 +62,12 @@ class SavingsBook extends BaseModel {
     const results = await this.db.query(sql, [id, userId]);
     return results.length > 0;
   }
+
+  /** Tổng số dư tiết kiệm (tất cả sổ) của user */
+  async getTotalBalanceForUser(userId) {
+    const books = await this.findAllByUser(userId);
+    return books.reduce((sum, b) => sum + parseFloat(b.balance || 0), 0);
+  }
 }
 
 module.exports = new SavingsBook();

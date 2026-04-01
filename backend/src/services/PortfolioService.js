@@ -4,6 +4,8 @@
  */
 const Holding = require('../models/Holding');
 const PortfolioSnapshot = require('../models/PortfolioSnapshot');
+const SavingsBook = require('../models/SavingsBook');
+const SavingsSnapshot = require('../models/SavingsSnapshot');
 const Category = require('../models/Category');
 
 class PortfolioService {
@@ -91,6 +93,14 @@ class PortfolioService {
       );
       snapshots.push(snapshot);
     }
+
+    const savingsBooks = await SavingsBook.findAllByUser(userId);
+    const totalSavingsBalance = savingsBooks.reduce((s, b) => s + parseFloat(b.balance || 0), 0);
+    const totalSavingsInterest = savingsBooks.reduce((s, b) => s + parseFloat(b.total_interest || 0), 0);
+    await SavingsSnapshot.upsert(userId, today, {
+      totalBalance: totalSavingsBalance,
+      totalInterest: totalSavingsInterest
+    });
 
     return snapshots;
   }

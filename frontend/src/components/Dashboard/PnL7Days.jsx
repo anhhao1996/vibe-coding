@@ -1,5 +1,5 @@
 /**
- * PnL Last 7 Days Component
+ * PnL Last 7 Days - Lãi/lỗ đầu tư + lãi đã nhận tiết kiệm (tại mỗi ngày snapshot)
  */
 import React from 'react';
 import {
@@ -18,13 +18,24 @@ import './Charts.css';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
+    const row = payload[0].payload;
     const value = payload[0].value;
+    const inv = row?.investmentPnl ?? 0;
+    const sav = row?.savingsInterest ?? 0;
     return (
       <div className="chart-tooltip">
         <p className="tooltip-label">{formatDate(label)}</p>
         <p className={`tooltip-value ${value >= 0 ? 'profit' : 'loss'}`}>
-          <span>Lãi/Lỗ:</span>
+          <span>Lãi/Lỗ (tổng):</span>
           <span className="number">{formatCurrency(value)}</span>
+        </p>
+        <p className="tooltip-value" style={{ opacity: 0.85 }}>
+          <span>Đầu tư:</span>
+          <span className="number">{formatCurrency(inv)}</span>
+        </p>
+        <p className="tooltip-value" style={{ opacity: 0.85 }}>
+          <span>Lãi tiết kiệm:</span>
+          <span className="number">{formatCurrency(sav)}</span>
         </p>
       </div>
     );
@@ -47,14 +58,21 @@ const PnL7Days = ({ data = [] }) => {
     );
   }
 
-  const chartData = data.map(item => ({
-    date: item.snapshot_date,
-    pnl: parseFloat(item.daily_pnl) || 0
-  }));
+  const chartData = data.map((item) => {
+    const daily = parseFloat(item.daily_pnl) || 0;
+    const hasSplit = item.investment_pnl != null && item.investment_pnl !== '';
+    const inv = hasSplit ? parseFloat(item.investment_pnl) || 0 : daily;
+    const sav = hasSplit ? parseFloat(item.savings_interest) || 0 : 0;
+    return {
+      date: item.snapshot_date,
+      pnl: daily,
+      investmentPnl: inv,
+      savingsInterest: sav
+    };
+  });
 
-  // Tính PnL: giá trị cột cuối - giá trị cột đầu
-  const totalPnl = chartData.length >= 2 
-    ? chartData[chartData.length - 1].pnl - chartData[0].pnl 
+  const totalPnl = chartData.length >= 2
+    ? chartData[chartData.length - 1].pnl - chartData[0].pnl
     : (chartData[0]?.pnl || 0);
 
   return (

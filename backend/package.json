@@ -7,6 +7,7 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "db:migrate": "node src/database/migrate.js",
+    "db:fix-portfolio-fk": "node src/database/migrate-fix-portfolio-snapshot-fk.js",
     "db:migrate-auth": "node src/database/migrate-auth.js",
     "db:migrate-settings": "node src/database/migrate-user-settings.js",
     "db:seed-snapshots": "node src/database/seed-snapshots.js",

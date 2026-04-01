@@ -43,7 +43,7 @@ const PortfolioLineChart = ({ data = [], days = 30 }) => {
     return (
       <div className="chart-container chart-large">
         <div className="chart-header">
-          <h3 className="chart-title">Biến thiên Portfolio ({days} ngày)</h3>
+          <h3 className="chart-title">Biến thiên tài sản ({days} ngày)</h3>
         </div>
         <div className="chart-empty">
           <span className="empty-icon">📈</span>
@@ -56,11 +56,11 @@ const PortfolioLineChart = ({ data = [], days = 30 }) => {
   const chartData = data.map(item => {
     const totalValue = parseFloat(item.total_value) || 0;
     const totalSold = parseFloat(item.total_sold) || 0;
+    const savings = parseFloat(item.savings_balance) || 0;
     return {
       date: item.snapshot_date,
-      // Giá trị = Giá trị hiện tại + Tổng đã bán
-      value: totalValue + totalSold,
-      // Đầu tư = Tổng đầu tư (sum of buy transactions)
+      // Giá trị = Đầu tư (giá trị + đã bán) + tiết kiệm tại ngày snapshot
+      value: totalValue + totalSold + savings,
       invested: parseFloat(item.total_invested) || 0,
       pnl: parseFloat(item.total_pnl) || 0
     };
@@ -69,11 +69,11 @@ const PortfolioLineChart = ({ data = [], days = 30 }) => {
   return (
     <div className="chart-container chart-large">
       <div className="chart-header">
-        <h3 className="chart-title">📈 Biến thiên Portfolio ({days} ngày)</h3>
+        <h3 className="chart-title">📈 Biến thiên tài sản ({days} ngày)</h3>
         <div className="chart-legend">
           <span className="legend-item">
             <span className="legend-color" style={{ background: 'var(--primary-500)' }}></span>
-            Giá trị
+            Đầu tư + Tiết kiệm
           </span>
           <span className="legend-item">
             <span className="legend-color" style={{ background: '#1976D2' }}></span>
@@ -123,7 +123,7 @@ const PortfolioLineChart = ({ data = [], days = 30 }) => {
             <Line 
               type="monotone" 
               dataKey="value" 
-              name="Giá trị"
+              name="Tổng giá trị"
               stroke="var(--primary-500)" 
               strokeWidth={3}
               dot={false}

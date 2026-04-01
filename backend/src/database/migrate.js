@@ -106,6 +106,17 @@ const migrations = [
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (savings_book_id) REFERENCES savings_books(id) ON DELETE CASCADE
+  )`,
+
+  // Savings snapshots - Tổng số dư tiết kiệm theo ngày (khi bấm Lưu Snapshot)
+  `CREATE TABLE IF NOT EXISTS savings_snapshots (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    snapshot_date DATE NOT NULL,
+    total_balance DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    total_interest DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_user_savings_snapshot_date (user_id, snapshot_date)
   )`
 ];
 
@@ -114,12 +125,18 @@ async function migrate() {
   
   try {
     // Kết nối không có database để tạo database nếu chưa có
-    connection = await mysql.createConnection({
+    const connectionConfig = {
       host: process.env.DB_HOST || 'localhost',
       port: process.env.DB_PORT || 3306,
       user: process.env.DB_USER || 'root',
       password: process.env.DB_PASSWORD || ''
-    });
+    };
+
+    if (process.env.DB_SSL === 'true') {
+      connectionConfig.ssl = { rejectUnauthorized: true };
+    }
+
+    connection = await mysql.createConnection(connectionConfig);
 
     const dbName = process.env.DB_NAME || 'investment_tracker';
     
@@ -133,6 +150,15 @@ async function migrate() {
     for (let i = 0; i < migrations.length; i++) {
       await connection.query(migrations[i]);
       console.log(`✓ Migration ${i + 1}/${migrations.length} completed`);
+    }
+
+    try {
+      await connection.query(
+        `ALTER TABLE savings_snapshots ADD COLUMN total_interest DECIMAL(15, 2) NOT NULL DEFAULT 0 AFTER total_balance`
+      );
+      console.log('✓ savings_snapshots.total_interest column added');
+    } catch (e) {
+      if (e.code !== 'ER_DUP_FIELDNAME') throw e;
     }
 
     console.log('\n✅ All migrations completed successfully!');
