@@ -166,3 +166,4 @@ MIT License
 ---
 
 Made with 💚 for personal investment tracking
+
