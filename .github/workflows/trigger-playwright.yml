@@ -1,0 +1,11 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-tests:
+    uses: anhhao1996/playwright-test/.github/workflows/run-tests.yml@master
+    with:
+      browser: chrome        # hardcoded value
+    secrets: inherit
