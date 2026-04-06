@@ -87,6 +87,7 @@
 }
 
 .category-name {
+  font-family: 'Lexend', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--text-primary);

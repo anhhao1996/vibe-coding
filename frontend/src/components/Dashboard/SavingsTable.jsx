@@ -31,7 +31,9 @@ const SavingsTable = ({ data = [] }) => {
         <h3 className="savings-table-title">🏦 Tổng quan Tiết kiệm</h3>
         <span className="savings-table-total number">{formatCurrency(totalBalance)}</span>
       </div>
-      <div className="savings-table-body">
+
+      {/* Desktop Table */}
+      <div className="savings-table-body savings-desktop">
         <table className="savings-overview-table">
           <thead>
             <tr>
@@ -68,6 +70,61 @@ const SavingsTable = ({ data = [] }) => {
             </tr>
           </tfoot>
         </table>
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="savings-mobile">
+        {data.map((book, index) => (
+          <div
+            key={book.id}
+            className="savings-card-item animate-fade-in"
+            style={{ animationDelay: `${index * 50}ms` }}
+          >
+            <div className="savings-card-item-top">
+              <div className="savings-card-item-name">
+                <span className="savings-dot" style={{ backgroundColor: book.color || '#2196F3' }}></span>
+                <span>{book.name}</span>
+              </div>
+              <span className="number savings-balance-val">{formatCurrency(book.balance)}</span>
+            </div>
+            <div className="savings-card-item-numbers">
+              <div className="savings-card-item-col">
+                <span className="savings-card-item-label">Đã nạp</span>
+                <span className="number">{formatCurrency(book.total_deposited)}</span>
+              </div>
+              <div className="savings-card-item-col">
+                <span className="savings-card-item-label">Lãi nhận</span>
+                <span className="number savings-interest">{formatCurrency(book.total_interest)}</span>
+              </div>
+              <div className="savings-card-item-col">
+                <span className="savings-card-item-label">Đã rút</span>
+                <span className="number savings-withdrawn">{formatCurrency(book.total_withdrawn)}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+        <div className="savings-card-item savings-card-item-total">
+          <div className="savings-card-item-top">
+            <div className="savings-card-item-name">
+              <strong>TỔNG CỘNG</strong>
+            </div>
+            <strong className="number savings-balance-val">{formatCurrency(totalBalance)}</strong>
+          </div>
+          <div className="savings-card-item-numbers">
+            <div className="savings-card-item-col">
+              <span className="savings-card-item-label">Đã nạp</span>
+              <strong className="number">{formatCurrency(totalDeposited)}</strong>
+            </div>
+            <div className="savings-card-item-col">
+              <span className="savings-card-item-label">Lãi nhận</span>
+              <strong className="number savings-interest">{formatCurrency(totalInterest)}</strong>
+            </div>
+            <div className="savings-card-item-col">
+              <span className="savings-card-item-label">Đã rút</span>
+              <strong className="number savings-withdrawn">{formatCurrency(totalWithdrawn)}</strong>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

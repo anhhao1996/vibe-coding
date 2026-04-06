@@ -36,7 +36,9 @@ const PnLTable = ({ data = [] }) => {
         <h3 className="pnl-table-title">📋 Chi tiết Lời/Lỗ</h3>
         <span className="pnl-table-total number">{formatCurrency(totalValue)}</span>
       </div>
-      <div className="pnl-table-body">
+
+      {/* Desktop Table */}
+      <div className="pnl-table-body pnl-desktop">
         <table className="pnl-table">
           <thead>
             <tr>
@@ -100,6 +102,74 @@ const PnLTable = ({ data = [] }) => {
             </tr>
           </tfoot>
         </table>
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="pnl-mobile">
+        {sortedData.map((item, index) => {
+          const pnl = parseFloat(item.pnl) || 0;
+          const pnlPercentage = parseFloat(item.pnl_percentage) || 0;
+          const pnlClass = getPnlClass(pnl);
+
+          return (
+            <div
+              key={item.category_id || index}
+              className="pnl-card animate-fade-in"
+              style={{ animationDelay: `${index * 50}ms` }}
+            >
+              <div className="pnl-card-top">
+                <div className="pnl-card-name">
+                  <span
+                    className="category-color"
+                    style={{ backgroundColor: item.color || 'var(--primary-500)' }}
+                  ></span>
+                  <span>{item.category_name}</span>
+                </div>
+                <span className={`pnl-badge ${pnlClass}`}>
+                  {formatPercentage(pnlPercentage)}
+                </span>
+              </div>
+              <div className="pnl-card-numbers">
+                <div className="pnl-card-col">
+                  <span className="pnl-card-label">Đầu tư</span>
+                  <span className="number">{formatCurrency(item.total_invested)}</span>
+                </div>
+                <div className="pnl-card-col">
+                  <span className="pnl-card-label">Giá trị</span>
+                  <span className="number">{formatCurrency(item.current_value)}</span>
+                </div>
+                <div className="pnl-card-col">
+                  <span className="pnl-card-label">Lãi/Lỗ</span>
+                  <span className={`number ${pnlClass}`}>{formatCurrency(pnl)}</span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+        <div className="pnl-card pnl-card-total">
+          <div className="pnl-card-top">
+            <div className="pnl-card-name">
+              <strong>TỔNG CỘNG</strong>
+            </div>
+            <span className={`pnl-badge ${totalPnlClass}`}>
+              {formatPercentage(totalPnlPct)}
+            </span>
+          </div>
+          <div className="pnl-card-numbers">
+            <div className="pnl-card-col">
+              <span className="pnl-card-label">Đầu tư</span>
+              <strong className="number">{formatCurrency(totalInvested)}</strong>
+            </div>
+            <div className="pnl-card-col">
+              <span className="pnl-card-label">Giá trị</span>
+              <strong className="number">{formatCurrency(totalValue)}</strong>
+            </div>
+            <div className="pnl-card-col">
+              <span className="pnl-card-label">Lãi/Lỗ</span>
+              <strong className={`number ${totalPnlClass}`}>{formatCurrency(totalPnl)}</strong>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

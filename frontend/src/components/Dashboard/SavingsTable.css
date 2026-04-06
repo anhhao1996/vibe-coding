@@ -79,6 +79,7 @@
 }
 
 .savings-book-name {
+  font-family: 'Lexend', -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 500;
   color: var(--text-primary);
 }
@@ -101,11 +102,74 @@
   background: var(--bg-tertiary);
 }
 
+/* Mobile Cards - hidden by default */
+.savings-mobile {
+  display: none;
+}
+
+.savings-card-item {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.savings-card-item:last-child {
+  border-bottom: none;
+}
+
+.savings-card-item-total {
+  background: var(--bg-tertiary);
+  border-top: 2px solid var(--border-light);
+}
+
+.savings-card-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.savings-card-item-name {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-family: 'Lexend', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+}
+
+.savings-card-item-numbers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-sm);
+}
+
+.savings-card-item-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.savings-card-item-label {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.savings-card-item-col .number,
+.savings-card-item-col strong {
+  font-size: 0.8125rem;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .savings-overview-table th,
-  .savings-overview-table td {
-    padding: var(--spacing-sm);
-    font-size: 0.8125rem;
+  .savings-desktop {
+    display: none;
+  }
+
+  .savings-mobile {
+    display: block;
   }
 
   .savings-table-header {
