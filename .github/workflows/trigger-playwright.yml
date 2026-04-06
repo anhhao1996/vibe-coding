@@ -1,3 +1,5 @@
+name: Trigger Playwright Tests
+
 on:
   push:
     branches:
