@@ -114,4 +114,11 @@
     padding: var(--spacing-sm);
     font-size: 0.8125rem;
   }
+
+  .pnl-table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md);
+  }
 }

@@ -105,3 +105,13 @@
 .trend-icon {
   font-size: 0.75rem;
 }
+
+@media (max-width: 768px) {
+  .stat-card {
+    padding: var(--spacing-md);
+  }
+
+  .stat-card-value {
+    font-size: 1.375rem;
+  }
+}

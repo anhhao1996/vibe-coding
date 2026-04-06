@@ -331,113 +331,168 @@ const Transactions = () => {
             </button>
           </div>
         ) : (
-          <div className="transactions-table-wrapper">
-            <table className="transactions-table">
-              <thead>
-                <tr>
-                  <th>Ngày</th>
-                  <th>Danh mục</th>
-                  <th>Loại</th>
-                  <th className="text-right">Số lượng</th>
-                  <th className="text-right">Giá</th>
-                  <th className="text-right">Tổng</th>
-                  <th>Ghi chú</th>
-                  <th style={{ width: '180px', minWidth: '180px' }}>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedTransactions.map((transaction, index) => (
-                  <tr 
-                    key={transaction.id}
-                    className="animate-fade-in"
-                    style={{ animationDelay: `${index * 30}ms` }}
-                  >
-                    <td className="date-cell">
-                      {formatDate(transaction.transaction_date)}
-                    </td>
-                    <td>
-                      <div className="category-cell">
-                        <span 
-                          className="category-dot"
-                          style={{ backgroundColor: transaction.category_color }}
-                        ></span>
-                        {transaction.category_name}
-                      </div>
-                    </td>
-                    <td>
-                      <span className={`type-badge ${transaction.type}`}>
-                        {transaction.type === 'buy' ? '🟢 Mua' : '🔴 Bán'}
-                      </span>
-                    </td>
-                    <td className="text-right number">
-                      {formatQuantity(transaction.quantity)}
-                    </td>
-                    <td className="text-right number">
-                      {formatCurrency(transaction.price)}
-                    </td>
-                    <td className={`text-right number ${transaction.type === 'buy' ? 'loss' : 'profit'}`}>
-                      {transaction.type === 'buy' ? '-' : '+'}{formatCurrency(transaction.amount)}
-                    </td>
-                    <td className="notes-cell">
-                      {transaction.notes || '-'}
-                    </td>
-                    <td className="actions-cell">
-                      <div style={{ display: 'flex', gap: '4px', justifyContent: 'center' }}>
-                        <button 
-                          style={{
-                            padding: '4px 10px',
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            background: '#e3f2fd',
-                            color: '#1976d2',
-                            border: '1px solid #90caf9'
-                          }}
-                          onClick={() => openDetailModal(transaction)}
-                          title="Xem chi tiết"
-                        >
-                          Xem
-                        </button>
-                        <button 
-                          style={{
-                            padding: '4px 10px',
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            background: '#fff8e1',
-                            color: '#f57c00',
-                            border: '1px solid #ffcc80'
-                          }}
-                          onClick={() => openEditModal(transaction)}
-                          title="Sửa"
-                        >
-                          Sửa
-                        </button>
-                        <button 
-                          style={{
-                            padding: '4px 10px',
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            background: '#ffebee',
-                            color: '#d32f2f',
-                            border: '1px solid #ef9a9a'
-                          }}
-                          onClick={() => handleDeleteTransaction(transaction.id)}
-                          title="Xóa"
-                        >
-                          Xóa
-                        </button>
-                      </div>
-                    </td>
+          <>
+            {/* Desktop Table */}
+            <div className="transactions-table-wrapper desktop-only">
+              <table className="transactions-table">
+                <thead>
+                  <tr>
+                    <th>Ngày</th>
+                    <th>Danh mục</th>
+                    <th>Loại</th>
+                    <th className="text-right">Số lượng</th>
+                    <th className="text-right">Giá</th>
+                    <th className="text-right">Tổng</th>
+                    <th>Ghi chú</th>
+                    <th style={{ width: '180px', minWidth: '180px' }}>Thao tác</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {paginatedTransactions.map((transaction, index) => (
+                    <tr 
+                      key={transaction.id}
+                      className="animate-fade-in"
+                      style={{ animationDelay: `${index * 30}ms` }}
+                    >
+                      <td className="date-cell">
+                        {formatDate(transaction.transaction_date)}
+                      </td>
+                      <td>
+                        <div className="category-cell">
+                          <span 
+                            className="category-dot"
+                            style={{ backgroundColor: transaction.category_color }}
+                          ></span>
+                          {transaction.category_name}
+                        </div>
+                      </td>
+                      <td>
+                        <span className={`type-badge ${transaction.type}`}>
+                          {transaction.type === 'buy' ? '🟢 Mua' : '🔴 Bán'}
+                        </span>
+                      </td>
+                      <td className="text-right number">
+                        {formatQuantity(transaction.quantity)}
+                      </td>
+                      <td className="text-right number">
+                        {formatCurrency(transaction.price)}
+                      </td>
+                      <td className={`text-right number ${transaction.type === 'buy' ? 'loss' : 'profit'}`}>
+                        {transaction.type === 'buy' ? '-' : '+'}{formatCurrency(transaction.amount)}
+                      </td>
+                      <td className="notes-cell">
+                        {transaction.notes || '-'}
+                      </td>
+                      <td className="actions-cell">
+                        <div style={{ display: 'flex', gap: '4px', justifyContent: 'center' }}>
+                          <button 
+                            style={{
+                              padding: '4px 10px',
+                              fontSize: '0.75rem',
+                              fontWeight: 600,
+                              borderRadius: '4px',
+                              cursor: 'pointer',
+                              background: '#e3f2fd',
+                              color: '#1976d2',
+                              border: '1px solid #90caf9'
+                            }}
+                            onClick={() => openDetailModal(transaction)}
+                            title="Xem chi tiết"
+                          >
+                            Xem
+                          </button>
+                          <button 
+                            style={{
+                              padding: '4px 10px',
+                              fontSize: '0.75rem',
+                              fontWeight: 600,
+                              borderRadius: '4px',
+                              cursor: 'pointer',
+                              background: '#fff8e1',
+                              color: '#f57c00',
+                              border: '1px solid #ffcc80'
+                            }}
+                            onClick={() => openEditModal(transaction)}
+                            title="Sửa"
+                          >
+                            Sửa
+                          </button>
+                          <button 
+                            style={{
+                              padding: '4px 10px',
+                              fontSize: '0.75rem',
+                              fontWeight: 600,
+                              borderRadius: '4px',
+                              cursor: 'pointer',
+                              background: '#ffebee',
+                              color: '#d32f2f',
+                              border: '1px solid #ef9a9a'
+                            }}
+                            onClick={() => handleDeleteTransaction(transaction.id)}
+                            title="Xóa"
+                          >
+                            Xóa
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Card List */}
+            <div className="transactions-cards mobile-only">
+              {paginatedTransactions.map((transaction, index) => (
+                <div 
+                  key={transaction.id}
+                  className={`transaction-card animate-fade-in ${transaction.type}`}
+                  style={{ animationDelay: `${index * 30}ms` }}
+                  onClick={() => openDetailModal(transaction)}
+                >
+                  <div className="transaction-card-top">
+                    <div className="transaction-card-left">
+                      <span 
+                        className="category-dot"
+                        style={{ backgroundColor: transaction.category_color }}
+                      ></span>
+                      <div className="transaction-card-info">
+                        <span className="transaction-card-category">{transaction.category_name}</span>
+                        <span className="transaction-card-date">{formatDate(transaction.transaction_date)}</span>
+                      </div>
+                    </div>
+                    <div className="transaction-card-right">
+                      <span className={`transaction-card-amount number ${transaction.type === 'buy' ? 'loss' : 'profit'}`}>
+                        {transaction.type === 'buy' ? '-' : '+'}{formatCurrency(transaction.amount)}
+                      </span>
+                      <span className={`type-badge ${transaction.type}`}>
+                        {transaction.type === 'buy' ? 'Mua' : 'Bán'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="transaction-card-bottom">
+                    <span className="transaction-card-detail number">
+                      SL: {formatQuantity(transaction.quantity)} × {formatCurrency(transaction.price)}
+                    </span>
+                    <div className="transaction-card-actions">
+                      <button 
+                        className="btn-action btn-edit"
+                        onClick={(e) => { e.stopPropagation(); openEditModal(transaction); }}
+                      >
+                        Sửa
+                      </button>
+                      <button 
+                        className="btn-action btn-delete"
+                        onClick={(e) => { e.stopPropagation(); handleDeleteTransaction(transaction.id); }}
+                      >
+                        Xóa
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
 
         {/* Pagination */}

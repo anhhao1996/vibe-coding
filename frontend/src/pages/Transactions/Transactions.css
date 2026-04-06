@@ -626,8 +626,128 @@
   margin-bottom: var(--spacing-lg);
 }
 
+/* Desktop/Mobile visibility */
+.mobile-only {
+  display: none;
+}
+
+/* Transaction Card (mobile) */
+.transactions-cards {
+  flex-direction: column;
+}
+
+.transaction-card {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-light);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  position: relative;
+}
+
+.transaction-card:last-child {
+  border-bottom: none;
+}
+
+.transaction-card:active {
+  background: var(--bg-tertiary);
+}
+
+.transaction-card.buy {
+  border-left: 3px solid var(--success);
+}
+
+.transaction-card.sell {
+  border-left: 3px solid var(--error);
+}
+
+.transaction-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.transaction-card-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 0;
+}
+
+.transaction-card-left .category-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.transaction-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.transaction-card-category {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.transaction-card-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.transaction-card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.transaction-card-amount {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.transaction-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transaction-card-detail {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.transaction-card-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.transaction-card-actions .btn-action {
+  padding: 4px 12px !important;
+  font-size: 0.75rem !important;
+  min-height: auto !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: flex;
+  }
+
   .filter-header {
     flex-direction: column;
     align-items: stretch;
@@ -690,5 +810,9 @@
   
   .page-header .btn {
     width: 100%;
+  }
+
+  .transactions-container {
+    border-radius: var(--radius-md);
   }
 }

@@ -416,6 +416,18 @@ a:hover {
   to { transform: rotate(360deg); }
 }
 
+/* Touch-friendly: larger tap targets on mobile */
+@media (max-width: 768px) {
+  .btn {
+    min-height: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .btn-sm {
+    min-height: 36px;
+  }
+}
+
 /* Loading Screen */
 .loading-screen {
   min-height: 100vh;

@@ -1,6 +1,5 @@
 /**
  * Login Page
- * Trang đăng nhập
  */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -35,7 +34,6 @@ const Login = () => {
 
     try {
       if (isRegister) {
-        // Validate register form
         if (formData.password !== formData.confirmPassword) {
           setError('Mật khẩu xác nhận không khớp');
           setLoading(false);
@@ -60,7 +58,6 @@ const Login = () => {
           setError(result.error);
         }
       } else {
-        // Login
         const result = await login(formData.username, formData.password);
         
         if (result.success) {
@@ -91,117 +88,142 @@ const Login = () => {
   return (
     <div className="login-page">
       <div className="login-container">
-        <div className="login-header">
-          <div className="login-logo">📊</div>
-          <h1>Investment Tracker</h1>
-          <p>Quản lý danh mục đầu tư cá nhân</p>
+        <div className="login-brand">
+          <span className="login-brand-icon">🌱</span>
+          <div className="login-brand-name">InvestTracker</div>
+          <div className="login-brand-tagline">Quản lý danh mục đầu tư cá nhân</div>
         </div>
 
-        <form className="login-form" onSubmit={handleSubmit}>
-          <h2>{isRegister ? 'Đăng ký tài khoản' : 'Đăng nhập'}</h2>
-          
-          {error && (
-            <div className="error-message">
-              <span>⚠️</span> {error}
-            </div>
-          )}
+        <div className="login-card">
+          <form className="login-card-body" onSubmit={handleSubmit}>
+            <h2 className="login-title">
+              {isRegister ? 'Tạo tài khoản' : 'Đăng nhập'}
+            </h2>
 
-          <div className="form-group">
-            <label htmlFor="username">Tên đăng nhập</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="Nhập tên đăng nhập..."
-              required
-              disabled={loading}
-              autoFocus
-            />
-          </div>
+            {error && (
+              <div className="login-error">
+                <span className="login-error-icon">⚠️</span>
+                {error}
+              </div>
+            )}
 
-          {isRegister && (
-            <>
-              <div className="form-group">
-                <label htmlFor="displayName">Tên hiển thị</label>
+            <div className="login-field">
+              <label className="login-label" htmlFor="username">Tên đăng nhập</label>
+              <div className="login-input-wrapper">
+                <span className="login-input-icon">👤</span>
                 <input
+                  className="login-input"
                   type="text"
-                  id="displayName"
-                  name="displayName"
-                  value={formData.displayName}
+                  id="username"
+                  name="username"
+                  value={formData.username}
                   onChange={handleChange}
-                  placeholder="Nhập tên hiển thị..."
+                  placeholder="Nhập tên đăng nhập..."
+                  required
                   disabled={loading}
+                  autoFocus
                 />
               </div>
-
-              <div className="form-group">
-                <label htmlFor="email">Email (tùy chọn)</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Nhập email..."
-                  disabled={loading}
-                />
-              </div>
-            </>
-          )}
-
-          <div className="form-group">
-            <label htmlFor="password">Mật khẩu</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Nhập mật khẩu..."
-              required
-              disabled={loading}
-            />
-          </div>
-
-          {isRegister && (
-            <div className="form-group">
-              <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="Nhập lại mật khẩu..."
-                required
-                disabled={loading}
-              />
             </div>
-          )}
 
-          <button 
-            type="submit" 
-            className="btn btn-primary btn-login"
-            disabled={loading}
-          >
-            {loading ? '⏳ Đang xử lý...' : (isRegister ? 'Đăng ký' : 'Đăng nhập')}
-          </button>
-        </form>
+            {isRegister && (
+              <>
+                <div className="login-field">
+                  <label className="login-label" htmlFor="displayName">Tên hiển thị</label>
+                  <div className="login-input-wrapper">
+                    <span className="login-input-icon">✏️</span>
+                    <input
+                      className="login-input"
+                      type="text"
+                      id="displayName"
+                      name="displayName"
+                      value={formData.displayName}
+                      onChange={handleChange}
+                      placeholder="Nhập tên hiển thị..."
+                      disabled={loading}
+                    />
+                  </div>
+                </div>
 
-        <div className="login-footer">
-          <p>
-            {isRegister ? 'Đã có tài khoản?' : 'Chưa có tài khoản?'}
+                <div className="login-field">
+                  <label className="login-label" htmlFor="email">Email (tùy chọn)</label>
+                  <div className="login-input-wrapper">
+                    <span className="login-input-icon">📧</span>
+                    <input
+                      className="login-input"
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="Nhập email..."
+                      disabled={loading}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
+            <div className="login-field">
+              <label className="login-label" htmlFor="password">Mật khẩu</label>
+              <div className="login-input-wrapper">
+                <span className="login-input-icon">🔒</span>
+                <input
+                  className="login-input"
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Nhập mật khẩu..."
+                  required
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            {isRegister && (
+              <div className="login-field">
+                <label className="login-label" htmlFor="confirmPassword">Xác nhận mật khẩu</label>
+                <div className="login-input-wrapper">
+                  <span className="login-input-icon">🔒</span>
+                  <input
+                    className="login-input"
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Nhập lại mật khẩu..."
+                    required
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+            )}
+
             <button 
-              type="button" 
-              className="btn-link"
-              onClick={toggleMode}
+              type="submit" 
+              className="login-submit"
               disabled={loading}
             >
-              {isRegister ? 'Đăng nhập' : 'Đăng ký ngay'}
+              {loading ? '⏳ Đang xử lý...' : (isRegister ? 'Đăng ký' : 'Đăng nhập')}
             </button>
-          </p>
+          </form>
+
+          <div className="login-card-footer">
+            <p>
+              {isRegister ? 'Đã có tài khoản?' : 'Chưa có tài khoản?'}
+              <button 
+                type="button" 
+                className="login-toggle"
+                onClick={toggleMode}
+                disabled={loading}
+              >
+                {isRegister ? 'Đăng nhập' : 'Đăng ký ngay'}
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </div>

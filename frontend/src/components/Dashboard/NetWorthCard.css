@@ -179,3 +179,33 @@
     min-width: 100px;
   }
 }
+
+@media (max-width: 480px) {
+  .net-worth-card {
+    padding: var(--spacing-md);
+  }
+
+  .net-worth-value {
+    font-size: 1.625rem;
+  }
+
+  .net-worth-label {
+    font-size: 0.75rem;
+  }
+
+  .net-worth-gain {
+    font-size: 0.75rem;
+  }
+
+  .net-worth-breakdown {
+    gap: var(--spacing-md);
+  }
+
+  .breakdown-item {
+    min-width: 80px;
+  }
+
+  .breakdown-value {
+    font-size: 1rem;
+  }
+}
