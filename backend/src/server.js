@@ -11,6 +11,9 @@ const routes = require('./routes');
 
 const app = express();
 
+// Trust reverse proxy (nginx, Cloudflare, etc.) for accurate IP in rate limiting
+app.set('trust proxy', 1);
+
 // Security headers
 app.use(helmet());
 
@@ -69,7 +72,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(appConfig.port, () => {
+app.listen(appConfig.port, '127.0.0.1', () => {
   console.log(`
 ╔═══════════════════════════════════════════════════╗
 ║   Investment Tracker API Server                   ║
