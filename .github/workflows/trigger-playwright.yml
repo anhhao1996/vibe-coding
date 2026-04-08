@@ -103,7 +103,7 @@ jobs:
         env:
           BASE_URL: http://localhost:3000
           BROWSER: chrome
-        run: npx playwright test --project=e2e --workers=4
+        run: npx playwright test --project=e2e --workers=4 --retries=0
 
       - name: Upload test results
         if: ${{ !cancelled() }}
