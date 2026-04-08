@@ -35,8 +35,8 @@ class AuthController extends BaseController {
         return this.sendBadRequest(res, 'Username và password là bắt buộc');
       }
 
-      if (password.length < 4) {
-        return this.sendBadRequest(res, 'Password phải có ít nhất 4 ký tự');
+      if (password.length < 6) {
+        return this.sendBadRequest(res, 'Password phải có ít nhất 6 ký tự');
       }
 
       const user = await AuthService.register(username, password, display_name, email);

@@ -3,15 +3,9 @@
  * Lấy giá từ các nguồn bên ngoài
  */
 const axios = require('axios');
-const https = require('https');
-
 const FMARKET_PRODUCT_BASE = 'https://api.fmarket.vn/home/product';
 
-// Tạo axios instance bỏ qua SSL verification (cho Dragon Capital và các API khác)
 const axiosInstance = axios.create({
-  httpsAgent: new https.Agent({
-    rejectUnauthorized: false
-  }),
   timeout: 15000
 });
 
