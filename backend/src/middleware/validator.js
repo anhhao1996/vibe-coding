@@ -110,8 +110,49 @@ const portfolioValidators = {
   ]
 };
 
+// Auth validators
+const authValidators = {
+  login: [
+    body('username')
+      .trim()
+      .notEmpty().withMessage('Username là bắt buộc')
+      .isLength({ min: 3, max: 50 }).withMessage('Username phải từ 3 đến 50 ký tự'),
+    body('password')
+      .notEmpty().withMessage('Password là bắt buộc'),
+    handleValidation
+  ],
+  register: [
+    body('username')
+      .trim()
+      .notEmpty().withMessage('Username là bắt buộc')
+      .isLength({ min: 3, max: 50 }).withMessage('Username phải từ 3 đến 50 ký tự')
+      .matches(/^[a-zA-Z0-9_]+$/).withMessage('Username chỉ được chứa chữ cái, số và dấu gạch dưới'),
+    body('password')
+      .notEmpty().withMessage('Password là bắt buộc')
+      .isLength({ min: 6 }).withMessage('Password phải có ít nhất 6 ký tự'),
+    body('display_name')
+      .optional()
+      .trim()
+      .isLength({ max: 100 }).withMessage('Display name tối đa 100 ký tự'),
+    body('email')
+      .optional()
+      .trim()
+      .isEmail().withMessage('Email không hợp lệ'),
+    handleValidation
+  ],
+  changePassword: [
+    body('current_password')
+      .notEmpty().withMessage('Current password là bắt buộc'),
+    body('new_password')
+      .notEmpty().withMessage('New password là bắt buộc')
+      .isLength({ min: 6 }).withMessage('Password mới phải có ít nhất 6 ký tự'),
+    handleValidation
+  ]
+};
+
 module.exports = {
   categoryValidators,
   transactionValidators,
-  portfolioValidators
+  portfolioValidators,
+  authValidators
 };

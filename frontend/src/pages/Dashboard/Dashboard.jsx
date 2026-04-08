@@ -189,7 +189,7 @@ const Dashboard = () => {
 
       {/* Investment Stats */}
       <section className="stats-section">
-        <h3 className="section-label">💰 Đầu tư</h3>
+        <h3 className="section-label">💰 Đầu tư 1</h3>
         <div className="stats-grid">
           <StatCard
             title="Tổng đầu tư"

@@ -12,7 +12,16 @@ class BaseModel {
   }
 
   async findAll(orderBy = 'created_at DESC') {
-    const sql = `SELECT * FROM ${this.tableName} ORDER BY ${orderBy}`;
+    // Validate orderBy to prevent SQL injection
+    const ALLOWED_COLUMNS = ['id', 'name', 'created_at', 'updated_at', 'transaction_date', 'snapshot_date', 'month', 'amount', 'price', 'quantity'];
+    const ALLOWED_DIRECTIONS = ['ASC', 'DESC'];
+    const parts = orderBy.trim().split(/\s+/);
+    const column = parts[0];
+    const direction = (parts[1] || 'DESC').toUpperCase();
+    if (!ALLOWED_COLUMNS.includes(column) || !ALLOWED_DIRECTIONS.includes(direction)) {
+      throw new Error('Invalid orderBy parameter');
+    }
+    const sql = `SELECT * FROM ${this.tableName} ORDER BY ${column} ${direction}`;
     return await this.db.query(sql);
   }
 
