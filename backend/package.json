@@ -14,7 +14,8 @@
     "db:seed-snapshots": "node src/database/seed-snapshots.js",
     "db:clear-snapshots": "node src/database/clear-snapshots.js",
     "db:migrate-total-sold": "node src/database/migrate-add-total-sold.js",
-    "db:migrate-current-price": "node src/database/migrate-add-current-price.js"
+    "db:migrate-current-price": "node src/database/migrate-add-current-price.js",
+    "db:seed-test-data": "node src/database/seed-test-data.js"
   },
   "dependencies": {
     "axios": "^1.13.2",

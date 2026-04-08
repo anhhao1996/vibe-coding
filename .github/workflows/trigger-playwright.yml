@@ -56,6 +56,7 @@ jobs:
           node src/database/migrate-add-current-price.js
           node src/database/migrate-user-settings.js
           node src/database/migrate-snapshot-total-sold.js
+          node src/database/seed-test-data.js
 
       - name: Start backend server
         working-directory: backend

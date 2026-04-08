@@ -72,7 +72,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(appConfig.port, '127.0.0.1', () => {
+app.listen(appConfig.port, () => {
   console.log(`
 ╔═══════════════════════════════════════════════════╗
 ║   Investment Tracker API Server                   ║
