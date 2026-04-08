@@ -79,7 +79,7 @@ jobs:
       - name: Start frontend dev server
         working-directory: frontend
         env:
-          REACT_APP_API_URL: http://localhost:9000
+          REACT_APP_API_URL: http://localhost:9000/api
         run: npm start &
 
       - name: Wait for frontend
