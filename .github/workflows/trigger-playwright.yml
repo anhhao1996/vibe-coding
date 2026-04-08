@@ -1,4 +1,4 @@
-name: Trigger Playwright Tests
+name: Playwright Tests
 
 on:
   push:
@@ -9,8 +9,108 @@ on:
       - main
 
 jobs:
-  run-tests:
-    uses: anhhao1996/playwright-test/.github/workflows/run-tests.yml@master
-    with:
-      browser: chrome        # hardcoded value
-    secrets: inherit
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: test123
+          MYSQL_DATABASE: investment_tracker_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -ptest123"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # ── BACKEND ──────────────────────────────────────────
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm install
+
+      - name: Run database migrations
+        working-directory: backend
+        env:
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: test123
+          DB_NAME: investment_tracker_test
+          DB_SSL: false
+        run: |
+          node src/database/migrate.js
+          node src/database/migrate-auth.js
+
+      - name: Start backend server
+        working-directory: backend
+        env:
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: test123
+          DB_NAME: investment_tracker_test
+          DB_SSL: false
+          PORT: 9000
+          NODE_ENV: test
+          CORS_ORIGIN: http://localhost:3000
+          JWT_SECRET: ci-test-secret
+        run: node src/server.js &
+
+      - name: Wait for backend
+        run: npx wait-on http://localhost:9000/api/health --timeout 30000
+
+      # ── FRONTEND ─────────────────────────────────────────
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Start frontend dev server
+        working-directory: frontend
+        env:
+          REACT_APP_API_URL: http://localhost:9000
+        run: npm start &
+
+      - name: Wait for frontend
+        run: npx wait-on http://localhost:3000 --timeout 60000
+
+      # ── PLAYWRIGHT ───────────────────────────────────────
+      - name: Checkout playwright-test repo
+        uses: actions/checkout@v4
+        with:
+          repository: anhhao1996/playwright-test
+          path: playwright-test
+
+      - name: Install Playwright dependencies
+        working-directory: playwright-test
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        working-directory: playwright-test
+        env:
+          BASE_URL: http://localhost:3000
+          BROWSER: chrome
+        run: npx playwright test --project=e2e --workers=4
+
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: |
+            playwright-test/test-results/
+            playwright-test/playwright-report/
+          retention-days: 7
