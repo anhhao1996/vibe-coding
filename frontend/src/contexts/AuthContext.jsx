@@ -2,8 +2,8 @@
  * Auth Context
  * Quản lý trạng thái đăng nhập của user
  */
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import api from '../services/api';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
+import api, { setOnUnauthorized } from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -68,18 +68,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    // Clear state
+  const logout = useCallback(() => {
     setToken(null);
     setUser(null);
-    
-    // Clear localStorage
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
-    
-    // Remove Authorization header
     delete api.defaults.headers.common['Authorization'];
-  };
+  }, []);
+
+  useEffect(() => {
+    setOnUnauthorized(logout);
+    return () => setOnUnauthorized(null);
+  }, [logout]);
 
   const value = {
     user,

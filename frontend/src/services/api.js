@@ -6,6 +6,9 @@ import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:9000/api';
 
+let onUnauthorized = null;
+export const setOnUnauthorized = (callback) => { onUnauthorized = callback; };
+
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -19,6 +22,9 @@ const api = axios.create({
 api.interceptors.response.use(
   response => response.data,
   error => {
+    if (error.response?.status === 401 && !error.config?.url?.startsWith('/auth/')) {
+      onUnauthorized?.();
+    }
     const message = error.response?.data?.message || error.message || 'An error occurred';
     console.error('API Error:', message);
     return Promise.reject(new Error(message));
