@@ -7,18 +7,6 @@ const ExpenseService = require('../services/ExpenseService');
 
 class ExpenseController extends BaseController {
   /**
-   * Lấy tất cả chi tiêu hàng tháng
-   */
-  async getAll(req, res) {
-    try {
-      const expenses = await ExpenseService.getAllMonthlyExpenses(req.user.id);
-      return this.sendSuccess(res, expenses);
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
-  /**
    * Lấy chi tiêu theo tháng
    */
   async getByMonth(req, res) {
@@ -28,24 +16,6 @@ class ExpenseController extends BaseController {
       
       if (!expense) {
         return this.sendNotFound(res, `Không tìm thấy dữ liệu tháng ${month}`);
-      }
-      
-      return this.sendSuccess(res, expense);
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
-  /**
-   * Lấy chi tiêu theo ID
-   */
-  async getById(req, res) {
-    try {
-      const { id } = req.params;
-      const expense = await ExpenseService.getMonthlyExpenseById(id, req.user.id);
-      
-      if (!expense) {
-        return this.sendNotFound(res, 'Không tìm thấy chi tiêu');
       }
       
       return this.sendSuccess(res, expense);
@@ -163,20 +133,6 @@ class ExpenseController extends BaseController {
     try {
       const months = parseInt(req.query.months) || 12;
       const trend = await ExpenseService.getMonthlyTrend(months, req.user.id);
-      return this.sendSuccess(res, trend);
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
-  /**
-   * Lấy xu hướng theo tên khoản chi
-   */
-  async getItemTrend(req, res) {
-    try {
-      const { itemName } = req.params;
-      const months = parseInt(req.query.months) || 12;
-      const trend = await ExpenseService.getItemTrend(decodeURIComponent(itemName), months, req.user.id);
       return this.sendSuccess(res, trend);
     } catch (error) {
       return this.handleError(res, error);

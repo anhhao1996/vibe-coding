@@ -16,27 +16,6 @@ class TransactionController extends BaseController {
     }
   }
 
-  async getByCategory(req, res) {
-    try {
-      const categoryId = req.params.categoryId;
-      const limit = parseInt(req.query.limit) || 50;
-      const transactions = await TransactionService.getTransactionsByCategory(categoryId, limit, req.user.id);
-      return this.sendSuccess(res, transactions, 'Transactions retrieved successfully');
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
-  async getRecent(req, res) {
-    try {
-      const days = parseInt(req.query.days) || 7;
-      const transactions = await TransactionService.getRecentTransactions(days, req.user.id);
-      return this.sendSuccess(res, transactions, 'Recent transactions retrieved successfully');
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
   async create(req, res) {
     try {
       const transaction = await TransactionService.createTransaction(req.body, req.user.id);
@@ -64,18 +43,6 @@ class TransactionController extends BaseController {
     }
   }
 
-  async getByDateRange(req, res) {
-    try {
-      const { startDate, endDate } = req.query;
-      if (!startDate || !endDate) {
-        return this.sendBadRequest(res, 'startDate and endDate are required');
-      }
-      const transactions = await TransactionService.getTransactionsByDateRange(startDate, endDate, req.user.id);
-      return this.sendSuccess(res, transactions, 'Transactions retrieved successfully');
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
 }
 
 module.exports = new TransactionController();

@@ -10,19 +10,14 @@ class ExpenseItem extends BaseModel {
   }
 
   async findByMonthlyExpense(monthlyExpenseId) {
-    const sql = `
-      SELECT * FROM ${this.tableName} 
-      WHERE monthly_expense_id = ? 
-      ORDER BY created_at ASC
-    `;
-    return await this.db.query(sql, [monthlyExpenseId]);
+    return this.qb()
+      .where({ monthly_expense_id: monthlyExpenseId })
+      .orderBy('created_at', 'asc');
   }
 
   async copyFromMonth(sourceMonthlyExpenseId, targetMonthlyExpenseId) {
-    // Lấy tất cả items từ tháng nguồn
     const sourceItems = await this.findByMonthlyExpense(sourceMonthlyExpenseId);
-    
-    // Copy sang tháng đích
+
     const copiedItems = [];
     for (const item of sourceItems) {
       const newItem = await this.create({
@@ -33,7 +28,7 @@ class ExpenseItem extends BaseModel {
       });
       copiedItems.push(newItem);
     }
-    
+
     return copiedItems;
   }
 }

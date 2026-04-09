@@ -1,6 +1,6 @@
 /**
  * Portfolio Snapshot Model
- * Single Responsibility: Lưu trữ lịch sử giá trị portfolio
+ * Lưu trữ lịch sử giá trị portfolio
  */
 const BaseModel = require('./BaseModel');
 
@@ -10,38 +10,29 @@ class PortfolioSnapshot extends BaseModel {
   }
 
   async findByDateRange(startDate, endDate) {
-    const sql = `
-      SELECT 
-        ps.*,
-        c.name as category_name,
-        c.color as category_color
-      FROM ${this.tableName} ps
-      JOIN categories c ON ps.category_id = c.id
-      WHERE ps.snapshot_date BETWEEN ? AND ?
-      ORDER BY ps.snapshot_date ASC
-    `;
-    return await this.db.query(sql, [startDate, endDate]);
+    return this.db('portfolio_snapshots as ps')
+      .select('ps.*', 'c.name as category_name', 'c.color as category_color')
+      .join('categories as c', 'ps.category_id', 'c.id')
+      .whereBetween('ps.snapshot_date', [startDate, endDate])
+      .orderBy('ps.snapshot_date', 'asc');
   }
 
   async getLastNDays(days = 7, userId) {
-    const sql = `
-      SELECT 
-        ps.snapshot_date,
-        SUM(ps.total_value) as total_value,
-        SUM(ps.total_invested) as total_invested,
-        SUM(ps.pnl) as pnl
-      FROM ${this.tableName} ps
-      JOIN categories c ON ps.category_id = c.id
-      WHERE ps.snapshot_date >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
-        AND c.user_id = ?
-      GROUP BY ps.snapshot_date
-      ORDER BY ps.snapshot_date ASC
-    `;
-    return await this.db.query(sql, [days, userId]);
+    return this.db('portfolio_snapshots as ps')
+      .select('ps.snapshot_date')
+      .sum('ps.total_value as total_value')
+      .sum('ps.total_invested as total_invested')
+      .sum('ps.pnl as pnl')
+      .join('categories as c', 'ps.category_id', 'c.id')
+      .where('c.user_id', userId)
+      .andWhere('ps.snapshot_date', '>=', this.db.raw('DATE_SUB(CURDATE(), INTERVAL ? DAY)', [days]))
+      .groupBy('ps.snapshot_date')
+      .orderBy('ps.snapshot_date', 'asc');
   }
 
+  // UNION + derived tables + multiple JOINs — kept as db.raw() with parameterized bindings
   async getPortfolioHistory(days = 30, userId) {
-    const sql = `
+    const result = await this.db.raw(`
       SELECT 
         d.snapshot_date,
         COALESCE(inv.total_value, 0) as total_value,
@@ -53,7 +44,7 @@ class PortfolioSnapshot extends BaseModel {
         COALESCE(ss.total_deposited, 0) as savings_deposited
       FROM (
         SELECT DISTINCT snapshot_date FROM (
-          SELECT ps.snapshot_date FROM ${this.tableName} ps
+          SELECT ps.snapshot_date FROM portfolio_snapshots ps
           INNER JOIN categories c ON ps.category_id = c.id
           WHERE ps.snapshot_date >= DATE_SUB(CURDATE(), INTERVAL ? DAY) AND c.user_id = ?
           UNION
@@ -69,47 +60,43 @@ class PortfolioSnapshot extends BaseModel {
           SUM(COALESCE(ps.total_sold, 0)) as total_sold,
           SUM(ps.pnl) as total_pnl,
           AVG(ps.pnl_percentage) as avg_pnl_percentage
-        FROM ${this.tableName} ps
+        FROM portfolio_snapshots ps
         INNER JOIN categories c ON ps.category_id = c.id
         WHERE ps.snapshot_date >= DATE_SUB(CURDATE(), INTERVAL ? DAY) AND c.user_id = ?
         GROUP BY ps.snapshot_date
       ) inv ON inv.snapshot_date = d.snapshot_date
       LEFT JOIN savings_snapshots ss ON ss.user_id = ? AND ss.snapshot_date = d.snapshot_date
       ORDER BY d.snapshot_date ASC
-    `;
-    return await this.db.query(sql, [days, userId, userId, days, days, userId, userId]);
+    `, [days, userId, userId, days, days, userId, userId]);
+    return result[0];
   }
 
   async getCategoryHistory(categoryId, days = 30) {
-    const sql = `
-      SELECT *
-      FROM ${this.tableName}
-      WHERE category_id = ? AND snapshot_date >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
-      ORDER BY snapshot_date ASC
-    `;
-    return await this.db.query(sql, [categoryId, days]);
+    return this.qb()
+      .where({ category_id: categoryId })
+      .andWhere('snapshot_date', '>=', this.db.raw('DATE_SUB(CURDATE(), INTERVAL ? DAY)', [days]))
+      .orderBy('snapshot_date', 'asc');
   }
 
   async createOrUpdateSnapshot(categoryId, snapshotDate, data) {
-    const checkSql = `
-      SELECT id FROM ${this.tableName} 
-      WHERE category_id = ? AND snapshot_date = ?
-    `;
-    const existing = await this.db.query(checkSql, [categoryId, snapshotDate]);
+    const existing = await this.qb()
+      .select('id')
+      .where({ category_id: categoryId, snapshot_date: snapshotDate })
+      .first();
 
-    if (existing.length > 0) {
-      return await this.update(existing[0].id, data);
-    } else {
-      return await this.create({
-        category_id: categoryId,
-        snapshot_date: snapshotDate,
-        ...data
-      });
+    if (existing) {
+      return this.update(existing.id, data);
     }
+    return this.create({
+      category_id: categoryId,
+      snapshot_date: snapshotDate,
+      ...data
+    });
   }
 
+  // Correlated subquery + UNION + derived tables — kept as db.raw() with parameterized bindings
   async getPnlLast7Days(userId) {
-    const sql = `
+    const result = await this.db.raw(`
       SELECT 
         d.snapshot_date,
         COALESCE(inv.pnl_sum, 0) as investment_pnl,
@@ -117,13 +104,13 @@ class PortfolioSnapshot extends BaseModel {
         COALESCE(inv.pnl_sum, 0) + COALESCE(ss.total_interest, 0) as daily_pnl,
         (
           SELECT COALESCE(SUM(ps2.pnl), 0)
-          FROM ${this.tableName} ps2
+          FROM portfolio_snapshots ps2
           INNER JOIN categories c2 ON ps2.category_id = c2.id
           WHERE ps2.snapshot_date = d.snapshot_date AND c2.user_id = ?
         ) as cumulative_pnl
       FROM (
         SELECT DISTINCT snapshot_date FROM (
-          SELECT ps.snapshot_date FROM ${this.tableName} ps
+          SELECT ps.snapshot_date FROM portfolio_snapshots ps
           INNER JOIN categories c ON ps.category_id = c.id
           WHERE ps.snapshot_date >= DATE_SUB(CURDATE(), INTERVAL 6 DAY) AND c.user_id = ?
           UNION
@@ -135,15 +122,15 @@ class PortfolioSnapshot extends BaseModel {
         SELECT 
           ps.snapshot_date,
           SUM(ps.pnl) as pnl_sum
-        FROM ${this.tableName} ps
+        FROM portfolio_snapshots ps
         INNER JOIN categories c ON ps.category_id = c.id
         WHERE ps.snapshot_date >= DATE_SUB(CURDATE(), INTERVAL 6 DAY) AND c.user_id = ?
         GROUP BY ps.snapshot_date
       ) inv ON inv.snapshot_date = d.snapshot_date
       LEFT JOIN savings_snapshots ss ON ss.user_id = ? AND ss.snapshot_date = d.snapshot_date
       ORDER BY d.snapshot_date ASC
-    `;
-    return await this.db.query(sql, [userId, userId, userId, userId, userId]);
+    `, [userId, userId, userId, userId, userId]);
+    return result[0];
   }
 }
 

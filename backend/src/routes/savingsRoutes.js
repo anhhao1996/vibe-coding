@@ -24,9 +24,6 @@ router.delete('/:id', (req, res) => SavingsController.delete(req, res));
 // POST /api/savings/:id/transactions - Thêm giao dịch
 router.post('/:id/transactions', (req, res) => SavingsController.addTransaction(req, res));
 
-// PUT /api/savings/transactions/:id - Cập nhật giao dịch
-router.put('/transactions/:id', (req, res) => SavingsController.updateTransaction(req, res));
-
 // DELETE /api/savings/transactions/:id - Xóa giao dịch
 router.delete('/transactions/:id', (req, res) => SavingsController.deleteTransaction(req, res));
 

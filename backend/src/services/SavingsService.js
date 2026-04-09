@@ -64,23 +64,6 @@ class SavingsService {
     });
   }
 
-  async updateTransaction(id, data, userId) {
-    const tx = await SavingsTransaction.findById(id);
-    if (!tx) return null;
-
-    const belongs = await SavingsBook.belongsToUser(tx.savings_book_id, userId);
-    if (!belongs) return null;
-
-    const updateData = {};
-    if (data.type !== undefined) updateData.type = data.type;
-    if (data.amount !== undefined) updateData.amount = parseFloat(data.amount);
-    if (data.interest_rate !== undefined) updateData.interest_rate = data.interest_rate ? parseFloat(data.interest_rate) : null;
-    if (data.transaction_date !== undefined) updateData.transaction_date = data.transaction_date;
-    if (data.notes !== undefined) updateData.notes = data.notes;
-
-    return await SavingsTransaction.update(id, updateData);
-  }
-
   async deleteTransaction(id, userId) {
     const tx = await SavingsTransaction.findById(id);
     if (!tx) return false;

@@ -6,20 +6,6 @@ const express = require('express');
 const router = express.Router();
 const PriceController = require('../controllers/PriceController');
 
-// GET /api/price/fmarket/:productSlug - Lấy giá quỹ Fmarket (vd: dcds, vesaf, dcbf)
-router.get('/fmarket/:productSlug', (req, res) =>
-  PriceController.getFmarketProductPrice(req, res)
-);
-
-// GET /api/price/gold - Lấy giá vàng SJC
-router.get('/gold', (req, res) => PriceController.getGoldPrice(req, res));
-
-// GET /api/price/usd - Lấy tỷ giá USD
-router.get('/usd', (req, res) => PriceController.getUSDPrice(req, res));
-
-// GET /api/price/fund/:fundCode - Lấy giá theo fund code
-router.get('/fund/:fundCode', (req, res) => PriceController.getPriceByFundCode(req, res));
-
 // POST /api/price/fmarket/update/:categoryId — body/query slug (mặc định dcds)
 router.post('/fmarket/update/:categoryId', (req, res) =>
   PriceController.updateCategoryWithFmarketPrice(req, res)

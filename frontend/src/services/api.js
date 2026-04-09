@@ -28,7 +28,6 @@ api.interceptors.response.use(
 // Category API
 export const categoryApi = {
   getAll: () => api.get('/categories'),
-  getById: (id) => api.get(`/categories/${id}`),
   create: (data) => api.post('/categories', data),
   update: (id, data) => api.put(`/categories/${id}`, data),
   delete: (id) => api.delete(`/categories/${id}`)
@@ -37,9 +36,6 @@ export const categoryApi = {
 // Transaction API
 export const transactionApi = {
   getAll: (limit = 100) => api.get(`/transactions?limit=${limit}`),
-  getByCategory: (categoryId, limit = 50) => api.get(`/transactions/category/${categoryId}?limit=${limit}`),
-  getRecent: (days = 7) => api.get(`/transactions/recent?days=${days}`),
-  getByDateRange: (startDate, endDate) => api.get(`/transactions/date-range?startDate=${startDate}&endDate=${endDate}`),
   create: (data) => api.post('/transactions', data),
   update: (id, data) => api.put(`/transactions/${id}`, data),
   delete: (id) => api.delete(`/transactions/${id}`)
@@ -48,23 +44,12 @@ export const transactionApi = {
 // Portfolio API
 export const portfolioApi = {
   getDashboard: () => api.get('/portfolio/dashboard'),
-  getOverview: () => api.get('/portfolio/overview'),
-  getDistribution: () => api.get('/portfolio/distribution'),
-  getPnlByCategory: () => api.get('/portfolio/pnl'),
-  getPnl7Days: () => api.get('/portfolio/pnl-7days'),
-  getHistory: (days = 30) => api.get(`/portfolio/history?days=${days}`),
   updateCurrentPrice: (categoryId, currentPrice) => api.put(`/portfolio/price/${categoryId}`, { current_price: currentPrice }),
   createSnapshot: () => api.post('/portfolio/snapshot')
 };
 
 // External Price API
 export const priceApi = {
-  /** Giá quỹ Fmarket theo slug (vd: dcds, vesaf) */
-  getFmarketPrice: (productSlug) => api.get(`/price/fmarket/${encodeURIComponent(productSlug)}`),
-  getGoldPrice: () => api.get('/price/gold'),
-  getUSDPrice: () => api.get('/price/usd'),
-  getPriceByFundCode: (fundCode) => api.get(`/price/fund/${fundCode}`),
-  /** Cập nhật category theo NAV Fmarket; slug mặc định dcds */
   updateCategoryWithFmarket: (categoryId, slug = 'dcds') =>
     api.post(`/price/fmarket/update/${categoryId}`, { slug }),
   updateCategoryWithGold: (categoryId) => api.post(`/price/gold/update/${categoryId}`),
@@ -73,16 +58,12 @@ export const priceApi = {
 
 // Expense API - Quản lý chi tiêu
 export const expenseApi = {
-  getAll: () => api.get('/expenses'),
-  getCategories: () => api.get('/expenses/categories'),
   getItemNames: () => api.get('/expenses/item-names'),
   getTrackedItems: () => api.get('/expenses/tracked-items'),
   saveTrackedItems: (items) => api.put('/expenses/tracked-items', { items }),
   getTrend: (months = 12) => api.get(`/expenses/trend?months=${months}`),
-  getItemTrend: (itemName, months = 12) => api.get(`/expenses/trend/item/${encodeURIComponent(itemName)}?months=${months}`),
   getMultipleItemsTrend: (items, months = 12) => api.post(`/expenses/trend/items?months=${months}`, { items }),
   getByMonth: (month) => api.get(`/expenses/month/${month}`),
-  getById: (id) => api.get(`/expenses/${id}`),
   createMonth: (month, notes) => api.post('/expenses', { month, notes }),
   addItem: (monthlyExpenseId, data) => api.post(`/expenses/${monthlyExpenseId}/items`, data),
   updateItem: (id, data) => api.put(`/expenses/items/${id}`, data),
@@ -99,7 +80,6 @@ export const savingsApi = {
   update: (id, data) => api.put(`/savings/${id}`, data),
   delete: (id) => api.delete(`/savings/${id}`),
   addTransaction: (bookId, data) => api.post(`/savings/${bookId}/transactions`, data),
-  updateTransaction: (id, data) => api.put(`/savings/transactions/${id}`, data),
   deleteTransaction: (id) => api.delete(`/savings/transactions/${id}`)
 };
 

@@ -10,9 +10,6 @@ const { categoryValidators } = require('../middleware/validator');
 // GET /api/categories - Get all categories
 router.get('/', (req, res) => CategoryController.getAll(req, res));
 
-// GET /api/categories/:id - Get category by ID
-router.get('/:id', categoryValidators.getById, (req, res) => CategoryController.getById(req, res));
-
 // POST /api/categories - Create new category
 router.post('/', categoryValidators.create, (req, res) => CategoryController.create(req, res));
 

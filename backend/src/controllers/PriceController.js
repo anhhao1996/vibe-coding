@@ -10,32 +10,6 @@ const Holding = require('../models/Holding');
 
 class PriceController extends BaseController {
   /**
-   * Lấy giá quỹ Fmarket theo slug URL (vd: dcds, dcbf)
-   */
-  async getFmarketProductPrice(req, res) {
-    try {
-      const { productSlug } = req.params;
-      const priceData = await ExternalPriceService.getFmarketProductPrice(productSlug);
-      return this.sendSuccess(res, priceData, 'Fmarket product price fetched successfully');
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
-  /**
-   * Lấy giá theo fund code
-   */
-  async getPriceByFundCode(req, res) {
-    try {
-      const { fundCode } = req.params;
-      const priceData = await ExternalPriceService.getPriceByFundCode(fundCode);
-      return this.sendSuccess(res, priceData, 'Price fetched successfully');
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
-  /**
    * Lấy giá quỹ Fmarket và tự động cập nhật cho category
    * Body/query: slug (mặc định dcds), ví dụ vesaf, dcbf
    */
@@ -83,18 +57,6 @@ class PriceController extends BaseController {
   }
 
   /**
-   * Lấy giá vàng SJC
-   */
-  async getGoldPrice(req, res) {
-    try {
-      const priceData = await ExternalPriceService.getGoldPrice();
-      return this.sendSuccess(res, priceData, 'Gold price fetched successfully');
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
-  /**
    * Lấy giá vàng và tự động cập nhật cho category
    */
   async updateCategoryWithGoldPrice(req, res) {
@@ -131,18 +93,6 @@ class PriceController extends BaseController {
         source: priceData.source,
         type: priceData.type
       }, 'Category value updated with gold price');
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
-  /**
-   * Lấy tỷ giá USD từ Vietcombank
-   */
-  async getUSDPrice(req, res) {
-    try {
-      const priceData = await ExternalPriceService.getUSDPrice();
-      return this.sendSuccess(res, priceData, 'USD price fetched successfully');
     } catch (error) {
       return this.handleError(res, error);
     }

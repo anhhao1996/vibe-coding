@@ -1,0 +1,802 @@
+{
+  "Category.findById_1": null,
+  "Category.findAllByUser": [
+    {
+      "id": 90010,
+      "user_id": 1,
+      "name": "VESAF",
+      "description": null,
+      "color": "#4CAF50",
+      "created_at": "2026-04-01T15:09:13.000Z",
+      "updated_at": "2026-04-01T15:09:13.000Z"
+    },
+    {
+      "id": 9,
+      "user_id": 1,
+      "name": "Tiền Sức khỏe",
+      "description": "",
+      "color": "#4DD0E1",
+      "created_at": "2026-01-17T05:38:19.000Z",
+      "updated_at": "2026-01-17T06:03:39.000Z"
+    },
+    {
+      "id": 8,
+      "user_id": 1,
+      "name": "Tiền Du lịch",
+      "description": "",
+      "color": "#EF5350",
+      "created_at": "2026-01-17T05:38:14.000Z",
+      "updated_at": "2026-01-17T06:03:39.000Z"
+    },
+    {
+      "id": 7,
+      "user_id": 1,
+      "name": "Tiền tiết kiệm chung",
+      "description": "",
+      "color": "#BA68C8",
+      "created_at": "2026-01-17T05:38:03.000Z",
+      "updated_at": "2026-01-17T06:03:39.000Z"
+    },
+    {
+      "id": 6,
+      "user_id": 1,
+      "name": "Đô La Mỹ",
+      "description": null,
+      "color": "#81C784",
+      "created_at": "2026-01-16T04:31:14.000Z",
+      "updated_at": "2026-01-17T06:03:39.000Z"
+    },
+    {
+      "id": 5,
+      "user_id": 1,
+      "name": "Tiền mặt trả Ngân hàng sớm",
+      "description": "",
+      "color": "#2196F3",
+      "created_at": "2026-01-16T03:54:06.000Z",
+      "updated_at": "2026-01-17T06:03:39.000Z"
+    },
+    {
+      "id": 4,
+      "user_id": 1,
+      "name": "Vàng",
+      "description": "",
+      "color": "#FF9800",
+      "created_at": "2026-01-16T03:29:26.000Z",
+      "updated_at": "2026-04-01T04:12:39.000Z"
+    },
+    {
+      "id": 3,
+      "user_id": 1,
+      "name": "Chứng Chỉ Quỹ (DCDS)",
+      "description": null,
+      "color": "#4CAF50",
+      "created_at": "2026-01-16T02:52:16.000Z",
+      "updated_at": "2026-01-17T06:03:39.000Z"
+    }
+  ],
+  "Category.findByName_DCDS": null,
+  "Category.findWithHoldings": [
+    {
+      "id": 90010,
+      "user_id": 1,
+      "name": "VESAF",
+      "description": null,
+      "color": "#4CAF50",
+      "created_at": "2026-04-01T15:09:13.000Z",
+      "updated_at": "2026-04-01T15:09:13.000Z",
+      "quantity": "100.000000",
+      "average_price": "12000.0000",
+      "current_price": "35300.4200",
+      "total_invested": "1200000.00",
+      "total_sold": "0.00",
+      "current_value": "3530042.0000000000"
+    },
+    {
+      "id": 9,
+      "user_id": 1,
+      "name": "Tiền Sức khỏe",
+      "description": "",
+      "color": "#4DD0E1",
+      "created_at": "2026-01-17T05:38:19.000Z",
+      "updated_at": "2026-01-17T06:03:39.000Z",
+      "quantity": "1.000000",
+      "average_price": "13000000.0000",
+      "current_price": "13000000.0000",
+      "total_invested": "13000000.00",
+      "total_sold": "0.00",
+      "current_value": "13000000.0000000000"
+    },
+    {
+      "id": 8,
+      "user_id": 1,
+      "name": "Tiền Du lịch",
+      "description": "",
+      "color": "#EF5350",
+      "created_at": "2026-01-17T05:38:14.000Z",
+      "updated_at": "2026-01-17T06:03:39.000Z",
+      "quantity": "1.000000",
+      "average_price": "25800000.0000",
+      "current_price": "25800000.0000",
+      "total_invested": "25800000.00",
+      "total_sold": "0.00",
+      "current_value": "25800000.0000000000"
+    },
+    {
+      "id": 7,
+      "user_id": 1,
+      "name": "Tiền tiết kiệm chung",
+      "description": "",
+      "color": "#BA68C8",
+      "created_at": "2026-01-17T05:38:03.000Z",
+      "updated_at": "2026-01-17T06:03:39.000Z",
+      "quantity": "1.000000",
+      "average_price": "65418611.0000",
+      "current_price": "65418611.0000",
+      "total_invested": "65418611.00",
+      "total_sold": "0.00",
+      "current_value": "65418611.0000000000"
+    },
+    {
+      "id": 6,
+      "user_id": 1,
+      "name": "Đô La Mỹ",
+      "description": null,
+      "color": "#81C784",
+      "created_at": "2026-01-16T04:31:14.000Z",
+      "updated_at": "2026-01-17T06:03:39.000Z",
+      "quantity": "5000.000000",
+      "average_price": "0.0000",
+      "current_price": "26141.0000",
+      "total_invested": "0.00",
+      "total_sold": "0.00",
+      "current_value": "130705000.0000000000"
+    },
+    {
+      "id": 5,
+      "user_id": 1,
+      "name": "Tiền mặt trả Ngân hàng sớm",
+      "description": "",
+      "color": "#2196F3",
+      "created_at": "2026-01-16T03:54:06.000Z",
+      "updated_at": "2026-01-17T06:03:39.000Z",
+      "quantity": "1.000000",
+      "average_price": "71894242.0000",
+      "current_price": "71894242.0000",
+      "total_invested": "71894242.00",
+      "total_sold": "0.00",
+      "current_value": "71894242.0000000000"
+    },
+    {
+      "id": 4,
+      "user_id": 1,
+      "name": "Vàng",
+      "description": "",
+      "color": "#FF9800",
+      "created_at": "2026-01-16T03:29:26.000Z",
+      "updated_at": "2026-04-01T04:12:39.000Z",
+      "quantity": "1.700000",
+      "average_price": "0.0000",
+      "current_price": "170100000.0000",
+      "total_invested": "0.00",
+      "total_sold": "0.00",
+      "current_value": "289170000.0000000000"
+    },
+    {
+      "id": 3,
+      "user_id": 1,
+      "name": "Chứng Chỉ Quỹ (DCDS)",
+      "description": null,
+      "color": "#4CAF50",
+      "created_at": "2026-01-16T02:52:16.000Z",
+      "updated_at": "2026-01-17T06:03:39.000Z",
+      "quantity": "864.800000",
+      "average_price": "108925.2195",
+      "current_price": "100505.2800",
+      "total_invested": "94198529.85",
+      "total_sold": "0.00",
+      "current_value": "86916966.1440000000"
+    }
+  ],
+  "Category.getCategoryWithDetails_1": null,
+  "Category.belongsToUser_1": false,
+  "Category.count": 13,
+  "Holding.findByCategory_1": null,
+  "Holding.getAllWithCategories": [
+    {
+      "id": 4,
+      "category_id": 4,
+      "quantity": "1.700000",
+      "average_price": "0.0000",
+      "current_price": "170100000.0000",
+      "total_invested": "0.00",
+      "total_sold": "0.00",
+      "current_value": "289170000.0000000000",
+      "updated_at": "2026-04-06T05:53:21.000Z",
+      "category_name": "Vàng",
+      "category_color": "#FF9800",
+      "category_description": "",
+      "pnl": "289170000.0000000000",
+      "pnl_percentage": "0.00000000000000"
+    },
+    {
+      "id": 6,
+      "category_id": 6,
+      "quantity": "5000.000000",
+      "average_price": "0.0000",
+      "current_price": "26141.0000",
+      "total_invested": "0.00",
+      "total_sold": "0.00",
+      "current_value": "130705000.0000000000",
+      "updated_at": "2026-04-06T05:53:20.000Z",
+      "category_name": "Đô La Mỹ",
+      "category_color": "#81C784",
+      "category_description": null,
+      "pnl": "130705000.0000000000",
+      "pnl_percentage": "0.00000000000000"
+    },
+    {
+      "id": 3,
+      "category_id": 3,
+      "quantity": "864.800000",
+      "average_price": "108925.2195",
+      "current_price": "100505.2800",
+      "total_invested": "94198529.85",
+      "total_sold": "0.00",
+      "current_value": "86916966.1440000000",
+      "updated_at": "2026-04-06T05:53:21.000Z",
+      "category_name": "Chứng Chỉ Quỹ (DCDS)",
+      "category_color": "#4CAF50",
+      "category_description": null,
+      "pnl": "-7281563.7060000000",
+      "pnl_percentage": "-7.73001841705495"
+    },
+    {
+      "id": 5,
+      "category_id": 5,
+      "quantity": "1.000000",
+      "average_price": "71894242.0000",
+      "current_price": "71894242.0000",
+      "total_invested": "71894242.00",
+      "total_sold": "0.00",
+      "current_value": "71894242.0000000000",
+      "updated_at": "2026-02-26T20:35:51.000Z",
+      "category_name": "Tiền mặt trả Ngân hàng sớm",
+      "category_color": "#2196F3",
+      "category_description": "",
+      "pnl": "0.0000000000",
+      "pnl_percentage": "0.00000000000000"
+    },
+    {
+      "id": 7,
+      "category_id": 7,
+      "quantity": "1.000000",
+      "average_price": "65418611.0000",
+      "current_price": "65418611.0000",
+      "total_invested": "65418611.00",
+      "total_sold": "0.00",
+      "current_value": "65418611.0000000000",
+      "updated_at": "2026-02-26T20:35:41.000Z",
+      "category_name": "Tiền tiết kiệm chung",
+      "category_color": "#BA68C8",
+      "category_description": "",
+      "pnl": "0.0000000000",
+      "pnl_percentage": "0.00000000000000"
+    },
+    {
+      "id": 8,
+      "category_id": 8,
+      "quantity": "1.000000",
+      "average_price": "25800000.0000",
+      "current_price": "25800000.0000",
+      "total_invested": "25800000.00",
+      "total_sold": "0.00",
+      "current_value": "25800000.0000000000",
+      "updated_at": "2026-02-26T20:35:36.000Z",
+      "category_name": "Tiền Du lịch",
+      "category_color": "#EF5350",
+      "category_description": "",
+      "pnl": "0.0000000000",
+      "pnl_percentage": "0.00000000000000"
+    },
+    {
+      "id": 9,
+      "category_id": 9,
+      "quantity": "1.000000",
+      "average_price": "13000000.0000",
+      "current_price": "13000000.0000",
+      "total_invested": "13000000.00",
+      "total_sold": "0.00",
+      "current_value": "13000000.0000000000",
+      "updated_at": "2026-02-26T20:35:29.000Z",
+      "category_name": "Tiền Sức khỏe",
+      "category_color": "#4DD0E1",
+      "category_description": "",
+      "pnl": "0.0000000000",
+      "pnl_percentage": "0.00000000000000"
+    },
+    {
+      "id": 90008,
+      "category_id": 90010,
+      "quantity": "100.000000",
+      "average_price": "12000.0000",
+      "current_price": "35300.4200",
+      "total_invested": "1200000.00",
+      "total_sold": "0.00",
+      "current_value": "3530042.0000000000",
+      "updated_at": "2026-04-06T05:53:20.000Z",
+      "category_name": "VESAF",
+      "category_color": "#4CAF50",
+      "category_description": null,
+      "pnl": "2330042.0000000000",
+      "pnl_percentage": "194.17016666666667"
+    }
+  ],
+  "Holding.getTotalPortfolio": {
+    "total_invested": "271511382.85",
+    "total_sold": "0.00",
+    "total_value": "686434861.1440000000",
+    "total_pnl": "414923478.2940000000",
+    "total_pnl_percentage": "152.81992008535048"
+  },
+  "Transaction.findAllWithCategory": [
+    {
+      "id": 270004,
+      "category_id": 90010,
+      "type": "buy",
+      "amount": "1200000.00",
+      "price": "12000.0000",
+      "quantity": "100.000000",
+      "transaction_date": "2026-03-31T17:00:00.000Z",
+      "notes": null,
+      "created_at": "2026-04-01T15:09:23.000Z",
+      "updated_at": "2026-04-01T15:09:23.000Z",
+      "category_name": "VESAF",
+      "category_color": "#4CAF50"
+    },
+    {
+      "id": 150005,
+      "category_id": 3,
+      "type": "buy",
+      "amount": "2999141.95",
+      "price": "109697.9500",
+      "quantity": "27.340000",
+      "transaction_date": "2026-01-25T17:00:00.000Z",
+      "notes": null,
+      "created_at": "2026-01-26T03:57:50.000Z",
+      "updated_at": "2026-01-26T03:57:50.000Z",
+      "category_name": "Chứng Chỉ Quỹ (DCDS)",
+      "category_color": "#4CAF50"
+    },
+    {
+      "id": 15,
+      "category_id": 8,
+      "type": "buy",
+      "amount": "25800000.00",
+      "price": "25800000.0000",
+      "quantity": "1.000000",
+      "transaction_date": "2026-01-16T17:00:00.000Z",
+      "notes": "",
+      "created_at": "2026-01-17T05:40:33.000Z",
+      "updated_at": "2026-02-26T20:33:42.000Z",
+      "category_name": "Tiền Du lịch",
+      "category_color": "#EF5350"
+    },
+    {
+      "id": 14,
+      "category_id": 9,
+      "type": "buy",
+      "amount": "13000000.00",
+      "price": "13000000.0000",
+      "quantity": "1.000000",
+      "transaction_date": "2026-01-16T17:00:00.000Z",
+      "notes": "",
+      "created_at": "2026-01-17T05:39:19.000Z",
+      "updated_at": "2026-02-26T20:33:33.000Z",
+      "category_name": "Tiền Sức khỏe",
+      "category_color": "#4DD0E1"
+    },
+    {
+      "id": 13,
+      "category_id": 7,
+      "type": "buy",
+      "amount": "65418611.00",
+      "price": "65418611.0000",
+      "quantity": "1.000000",
+      "transaction_date": "2026-01-16T17:00:00.000Z",
+      "notes": "",
+      "created_at": "2026-01-17T05:38:36.000Z",
+      "updated_at": "2026-02-26T20:33:54.000Z",
+      "category_name": "Tiền tiết kiệm chung",
+      "category_color": "#BA68C8"
+    },
+    {
+      "id": 12,
+      "category_id": 5,
+      "type": "buy",
+      "amount": "71894242.00",
+      "price": "71894242.0000",
+      "quantity": "1.000000",
+      "transaction_date": "2026-01-16T17:00:00.000Z",
+      "notes": "",
+      "created_at": "2026-01-17T05:37:26.000Z",
+      "updated_at": "2026-02-26T20:34:40.000Z",
+      "category_name": "Tiền mặt trả Ngân hàng sớm",
+      "category_color": "#2196F3"
+    },
+    {
+      "id": 10,
+      "category_id": 3,
+      "type": "buy",
+      "amount": "21199250.00",
+      "price": "111575.0000",
+      "quantity": "190.000000",
+      "transaction_date": "2026-01-07T17:00:00.000Z",
+      "notes": "",
+      "created_at": "2026-01-16T03:56:26.000Z",
+      "updated_at": "2026-01-17T05:28:34.000Z",
+      "category_name": "Chứng Chỉ Quỹ (DCDS)",
+      "category_color": "#4CAF50"
+    },
+    {
+      "id": 3,
+      "category_id": 3,
+      "type": "buy",
+      "amount": "70000137.90",
+      "price": "108115.0000",
+      "quantity": "647.460000",
+      "transaction_date": "2026-01-05T17:00:00.000Z",
+      "notes": "",
+      "created_at": "2026-01-16T02:52:25.000Z",
+      "updated_at": "2026-01-17T05:28:12.000Z",
+      "category_name": "Chứng Chỉ Quỹ (DCDS)",
+      "category_color": "#4CAF50"
+    },
+    {
+      "id": 11,
+      "category_id": 6,
+      "type": "buy",
+      "amount": "0.00",
+      "price": "0.0000",
+      "quantity": "5000.000000",
+      "transaction_date": "2025-05-30T17:00:00.000Z",
+      "notes": "",
+      "created_at": "2026-01-16T04:31:43.000Z",
+      "updated_at": "2026-01-17T05:21:52.000Z",
+      "category_name": "Đô La Mỹ",
+      "category_color": "#81C784"
+    },
+    {
+      "id": 7,
+      "category_id": 4,
+      "type": "buy",
+      "amount": "0.00",
+      "price": "0.0000",
+      "quantity": "0.200000",
+      "transaction_date": "2024-07-12T17:00:00.000Z",
+      "notes": "",
+      "created_at": "2026-01-16T03:35:21.000Z",
+      "updated_at": "2026-01-17T05:28:59.000Z",
+      "category_name": "Vàng",
+      "category_color": "#FF9800"
+    },
+    {
+      "id": 6,
+      "category_id": 4,
+      "type": "buy",
+      "amount": "0.00",
+      "price": "0.0000",
+      "quantity": "1.500000",
+      "transaction_date": "2024-07-12T17:00:00.000Z",
+      "notes": "",
+      "created_at": "2026-01-16T03:35:09.000Z",
+      "updated_at": "2026-01-17T05:29:06.000Z",
+      "category_name": "Vàng",
+      "category_color": "#FF9800"
+    }
+  ],
+  "Transaction.findByCategory_1": [],
+  "Transaction.getRecentTransactions": [
+    {
+      "id": 270004,
+      "category_id": 90010,
+      "type": "buy",
+      "amount": "1200000.00",
+      "price": "12000.0000",
+      "quantity": "100.000000",
+      "transaction_date": "2026-03-31T17:00:00.000Z",
+      "notes": null,
+      "created_at": "2026-04-01T15:09:23.000Z",
+      "updated_at": "2026-04-01T15:09:23.000Z",
+      "category_name": "VESAF",
+      "category_color": "#4CAF50"
+    }
+  ],
+  "Transaction.getTotalsByCategory_1": [],
+  "PortfolioSnapshot.getLastNDays": [
+    {
+      "snapshot_date": "2026-03-31T17:00:00.000Z",
+      "total_value": "693089961.75",
+      "total_invested": "271511382.85",
+      "pnl": "421578578.90"
+    }
+  ],
+  "PortfolioSnapshot.getPortfolioHistory": [
+    {
+      "snapshot_date": "2026-03-31T17:00:00.000Z",
+      "total_value": "693089961.75",
+      "total_invested": "271511382.85",
+      "total_sold": "0.00",
+      "total_pnl": "421578578.90",
+      "avg_pnl_percentage": "23.69311250",
+      "savings_balance": "111422242.00",
+      "savings_deposited": "120000000.00"
+    }
+  ],
+  "PortfolioSnapshot.getPnlLast7Days": [],
+  "MonthlyExpense.findByMonth": {
+    "id": 90002,
+    "user_id": 1,
+    "month": "2026-04",
+    "total_amount": "0.00",
+    "notes": "",
+    "created_at": "2026-04-06T04:57:26.000Z",
+    "updated_at": "2026-04-06T04:57:26.000Z"
+  },
+  "MonthlyExpense.findWithItems": {
+    "id": 90002,
+    "user_id": 1,
+    "month": "2026-04",
+    "total_amount": "0.00",
+    "notes": "",
+    "created_at": "2026-04-06T04:57:26.000Z",
+    "updated_at": "2026-04-06T04:57:26.000Z",
+    "items": []
+  },
+  "MonthlyExpense.getMonthlyTrend": [
+    {
+      "month": "2025-05",
+      "total_amount": "42665134.00"
+    },
+    {
+      "month": "2025-06",
+      "total_amount": "46613207.00"
+    },
+    {
+      "month": "2025-07",
+      "total_amount": "45372281.00"
+    },
+    {
+      "month": "2025-08",
+      "total_amount": "45133001.00"
+    },
+    {
+      "month": "2025-09",
+      "total_amount": "45693305.00"
+    },
+    {
+      "month": "2025-10",
+      "total_amount": "45167864.00"
+    },
+    {
+      "month": "2025-11",
+      "total_amount": "45653707.00"
+    },
+    {
+      "month": "2025-12",
+      "total_amount": "45454188.00"
+    },
+    {
+      "month": "2026-01",
+      "total_amount": "47063664.00"
+    },
+    {
+      "month": "2026-02",
+      "total_amount": "45400003.00"
+    },
+    {
+      "month": "2026-04",
+      "total_amount": "0.00"
+    }
+  ],
+  "MonthlyExpense.getAllUniqueItemNames": [
+    "Chợ",
+    "Du lịch + Sức Khỏe",
+    "Internet",
+    "Phí Quản Lý",
+    "Tiết kiệm chung",
+    "Tiết kiệm trả thêm NH",
+    "Tiền dành mua xe",
+    "Tiền thuê nhà",
+    "Trả nợ Ngân Hàng",
+    "Điện"
+  ],
+  "MonthlyExpense.getMultipleItemsTrend": {
+    "Chợ": [
+      {
+        "month": "2025-05",
+        "amount": "3000000.00"
+      },
+      {
+        "month": "2025-06",
+        "amount": "3000000.00"
+      },
+      {
+        "month": "2025-07",
+        "amount": "3000000.00"
+      },
+      {
+        "month": "2025-08",
+        "amount": "3000000.00"
+      },
+      {
+        "month": "2025-09",
+        "amount": "3000000.00"
+      },
+      {
+        "month": "2025-10",
+        "amount": "3000000.00"
+      },
+      {
+        "month": "2025-11",
+        "amount": "3000000.00"
+      },
+      {
+        "month": "2025-12",
+        "amount": "3000000.00"
+      },
+      {
+        "month": "2026-01",
+        "amount": "3000000.00"
+      },
+      {
+        "month": "2026-02",
+        "amount": "3000000.00"
+      },
+      {
+        "month": "2026-04",
+        "amount": "0.00"
+      }
+    ],
+    "Du lịch + Sức Khỏe": [
+      {
+        "month": "2025-05",
+        "amount": "4000000.00"
+      },
+      {
+        "month": "2025-06",
+        "amount": "4000000.00"
+      },
+      {
+        "month": "2025-07",
+        "amount": "4000000.00"
+      },
+      {
+        "month": "2025-08",
+        "amount": "4000000.00"
+      },
+      {
+        "month": "2025-09",
+        "amount": "4000000.00"
+      },
+      {
+        "month": "2025-10",
+        "amount": "4000000.00"
+      },
+      {
+        "month": "2025-11",
+        "amount": "4000000.00"
+      },
+      {
+        "month": "2025-12",
+        "amount": "4000000.00"
+      },
+      {
+        "month": "2026-01",
+        "amount": "4000000.00"
+      },
+      {
+        "month": "2026-02",
+        "amount": "4000000.00"
+      },
+      {
+        "month": "2026-04",
+        "amount": "0.00"
+      }
+    ]
+  },
+  "ExpenseItem.findByMonthlyExpense": [],
+  "SavingsBook.findAllByUser": [
+    {
+      "id": 2,
+      "user_id": 1,
+      "name": "Finhay",
+      "description": "",
+      "color": "#F44336",
+      "created_at": "2026-03-02T11:44:07.000Z",
+      "updated_at": "2026-04-01T04:12:10.000Z",
+      "total_deposited": "50000000.00",
+      "total_withdrawn": "0.00",
+      "total_interest": "1528000.00",
+      "balance": "51528000.00",
+      "transaction_count": 2
+    },
+    {
+      "id": 1,
+      "user_id": 1,
+      "name": "Tikop",
+      "description": "",
+      "color": "#4CAF50",
+      "created_at": "2026-03-02T11:42:14.000Z",
+      "updated_at": "2026-04-01T04:22:07.000Z",
+      "total_deposited": "70000000.00",
+      "total_withdrawn": "12000000.00",
+      "total_interest": "1894242.00",
+      "balance": "59894242.00",
+      "transaction_count": 4
+    }
+  ],
+  "SavingsBook.findByIdWithTransactions": {
+    "id": 2,
+    "user_id": 1,
+    "name": "Finhay",
+    "description": "",
+    "color": "#F44336",
+    "created_at": "2026-03-02T11:44:07.000Z",
+    "updated_at": "2026-04-01T04:12:10.000Z",
+    "total_deposited": 50000000,
+    "total_withdrawn": 0,
+    "total_interest": 1528000,
+    "balance": 51528000,
+    "transactions": [
+      {
+        "id": 5,
+        "savings_book_id": 2,
+        "type": "interest",
+        "amount": "1528000.00",
+        "interest_rate": null,
+        "transaction_date": "2026-03-01T17:00:00.000Z",
+        "notes": "",
+        "created_at": "2026-03-02T11:44:48.000Z",
+        "updated_at": "2026-03-02T11:44:48.000Z"
+      },
+      {
+        "id": 4,
+        "savings_book_id": 2,
+        "type": "deposit",
+        "amount": "50000000.00",
+        "interest_rate": "6.0000",
+        "transaction_date": "2026-03-01T17:00:00.000Z",
+        "notes": "",
+        "created_at": "2026-03-02T11:44:36.000Z",
+        "updated_at": "2026-03-02T11:44:36.000Z"
+      }
+    ]
+  },
+  "SavingsBook.belongsToUser": true,
+  "SavingsBook.getTotalBalanceForUser": 111422242,
+  "SavingsTransaction.findBySavingsBook": [
+    {
+      "id": 5,
+      "savings_book_id": 2,
+      "type": "interest",
+      "amount": "1528000.00",
+      "interest_rate": null,
+      "transaction_date": "2026-03-01T17:00:00.000Z",
+      "notes": "",
+      "created_at": "2026-03-02T11:44:48.000Z",
+      "updated_at": "2026-03-02T11:44:48.000Z"
+    },
+    {
+      "id": 4,
+      "savings_book_id": 2,
+      "type": "deposit",
+      "amount": "50000000.00",
+      "interest_rate": "6.0000",
+      "transaction_date": "2026-03-01T17:00:00.000Z",
+      "notes": "",
+      "created_at": "2026-03-02T11:44:36.000Z",
+      "updated_at": "2026-03-02T11:44:36.000Z"
+    }
+  ],
+  "UserSettings.getSetting_nonexistent": null
+}

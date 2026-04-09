@@ -78,16 +78,6 @@ class SavingsController extends BaseController {
     }
   }
 
-  async updateTransaction(req, res) {
-    try {
-      const tx = await SavingsService.updateTransaction(parseInt(req.params.id), req.body, req.user.id);
-      if (!tx) return this.sendNotFound(res, 'Không tìm thấy giao dịch');
-      return this.sendSuccess(res, tx, 'Cập nhật giao dịch thành công');
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
   async deleteTransaction(req, res) {
     try {
       const success = await SavingsService.deleteTransaction(parseInt(req.params.id), req.user.id);

@@ -12,20 +12,6 @@ class TransactionService {
     return await Transaction.findAllWithCategory(limit, userId);
   }
 
-  async getTransactionsByCategory(categoryId, limit = 50, userId) {
-    // Verify category belongs to user
-    const belongsToUser = await Category.belongsToUser(categoryId, userId);
-    if (!belongsToUser) {
-      throw new Error('Category not found');
-    }
-    
-    return await Transaction.findByCategory(categoryId, limit);
-  }
-
-  async getRecentTransactions(days = 7, userId) {
-    return await Transaction.getRecentTransactions(days, userId);
-  }
-
   async createTransaction(data, userId) {
     // Validate category belongs to user
     const belongsToUser = await Category.belongsToUser(data.category_id, userId);
@@ -160,9 +146,6 @@ class TransactionService {
     return true;
   }
 
-  async getTransactionsByDateRange(startDate, endDate, userId) {
-    return await Transaction.getTransactionsByDateRange(startDate, endDate, userId);
-  }
 }
 
 module.exports = new TransactionService();

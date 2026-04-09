@@ -15,15 +15,6 @@ class CategoryController extends BaseController {
     }
   }
 
-  async getById(req, res) {
-    try {
-      const category = await CategoryService.getCategoryById(req.params.id, req.user.id);
-      return this.sendSuccess(res, category, 'Category retrieved successfully');
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
   async create(req, res) {
     try {
       const category = await CategoryService.createCategory(req.body, req.user.id);

@@ -1,7 +1,6 @@
 /**
  * Category Model
- * Liskov Substitution: Có thể thay thế BaseModel mà không ảnh hưởng logic
- * Single Responsibility: Chỉ quản lý danh mục đầu tư
+ * Quản lý danh mục đầu tư
  */
 const BaseModel = require('./BaseModel');
 
@@ -11,57 +10,58 @@ class Category extends BaseModel {
   }
 
   async findByName(name, userId) {
-    const sql = `SELECT * FROM ${this.tableName} WHERE name = ? AND user_id = ?`;
-    const results = await this.db.query(sql, [name, userId]);
-    return results[0] || null;
+    const row = await this.qb()
+      .where({ name, user_id: userId })
+      .first();
+    return row || null;
   }
 
   async findAllByUser(userId) {
-    const sql = `SELECT * FROM ${this.tableName} WHERE user_id = ? ORDER BY created_at DESC`;
-    return await this.db.query(sql, [userId]);
+    return this.qb()
+      .where({ user_id: userId })
+      .orderBy('created_at', 'desc');
   }
 
   async findWithHoldings(userId) {
-    const sql = `
-      SELECT 
-        c.*,
-        COALESCE(h.quantity, 0) as quantity,
-        COALESCE(h.average_price, 0) as average_price,
-        COALESCE(h.current_price, 0) as current_price,
-        COALESCE(h.total_invested, 0) as total_invested,
-        COALESCE(h.total_sold, 0) as total_sold,
-        (COALESCE(h.current_price, 0) * COALESCE(h.quantity, 0)) as current_value
-      FROM categories c
-      LEFT JOIN holdings h ON c.id = h.category_id
-      WHERE c.user_id = ?
-      ORDER BY c.created_at DESC
-    `;
-    return await this.db.query(sql, [userId]);
+    return this.db('categories as c')
+      .select(
+        'c.*',
+        this.db.raw('COALESCE(h.quantity, 0) as quantity'),
+        this.db.raw('COALESCE(h.average_price, 0) as average_price'),
+        this.db.raw('COALESCE(h.current_price, 0) as current_price'),
+        this.db.raw('COALESCE(h.total_invested, 0) as total_invested'),
+        this.db.raw('COALESCE(h.total_sold, 0) as total_sold'),
+        this.db.raw('(COALESCE(h.current_price, 0) * COALESCE(h.quantity, 0)) as current_value')
+      )
+      .leftJoin('holdings as h', 'c.id', 'h.category_id')
+      .where('c.user_id', userId)
+      .orderBy('c.created_at', 'desc');
   }
 
   async getCategoryWithDetails(categoryId, userId) {
-    const sql = `
-      SELECT 
-        c.*,
-        COALESCE(h.quantity, 0) as quantity,
-        COALESCE(h.average_price, 0) as average_price,
-        COALESCE(h.current_price, 0) as current_price,
-        COALESCE(h.total_invested, 0) as total_invested,
-        COALESCE(h.total_sold, 0) as total_sold,
-        (COALESCE(h.current_price, 0) * COALESCE(h.quantity, 0)) as current_value,
-        (SELECT COUNT(*) FROM transactions WHERE category_id = c.id) as transaction_count
-      FROM categories c
-      LEFT JOIN holdings h ON c.id = h.category_id
-      WHERE c.id = ? AND c.user_id = ?
-    `;
-    const results = await this.db.query(sql, [categoryId, userId]);
-    return results[0] || null;
+    const row = await this.db('categories as c')
+      .select(
+        'c.*',
+        this.db.raw('COALESCE(h.quantity, 0) as quantity'),
+        this.db.raw('COALESCE(h.average_price, 0) as average_price'),
+        this.db.raw('COALESCE(h.current_price, 0) as current_price'),
+        this.db.raw('COALESCE(h.total_invested, 0) as total_invested'),
+        this.db.raw('COALESCE(h.total_sold, 0) as total_sold'),
+        this.db.raw('(COALESCE(h.current_price, 0) * COALESCE(h.quantity, 0)) as current_value'),
+        this.db.raw('(SELECT COUNT(*) FROM transactions WHERE category_id = c.id) as transaction_count')
+      )
+      .leftJoin('holdings as h', 'c.id', 'h.category_id')
+      .where({ 'c.id': categoryId, 'c.user_id': userId })
+      .first();
+    return row || null;
   }
 
   async belongsToUser(categoryId, userId) {
-    const sql = `SELECT id FROM ${this.tableName} WHERE id = ? AND user_id = ?`;
-    const results = await this.db.query(sql, [categoryId, userId]);
-    return results.length > 0;
+    const row = await this.qb()
+      .select('id')
+      .where({ id: categoryId, user_id: userId })
+      .first();
+    return !!row;
   }
 }
 

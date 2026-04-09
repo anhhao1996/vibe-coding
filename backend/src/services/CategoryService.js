@@ -1,59 +1,42 @@
 /**
  * Category Service
- * Interface Segregation: Chỉ expose những methods cần thiết
- * Single Responsibility: Business logic cho categories
+ * Business logic cho categories
  */
 const Category = require('../models/Category');
 const db = require('../config/database');
 
 class CategoryService {
   async getAllCategories(userId) {
-    return await Category.findWithHoldings(userId);
-  }
-
-  async getCategoryById(id, userId) {
-    const category = await Category.getCategoryWithDetails(id, userId);
-    if (!category) {
-      throw new Error('Category not found');
-    }
-    return category;
+    return Category.findWithHoldings(userId);
   }
 
   async createCategory(data, userId) {
-    // Kiểm tra trùng tên trong phạm vi user
     const existing = await Category.findByName(data.name, userId);
     if (existing) {
       throw new Error('Category with this name already exists');
     }
 
-    const connection = await db.getConnection();
-    try {
-      await connection.beginTransaction();
+    return db.transaction(async (trx) => {
+      const [categoryId] = await trx('categories').insert({
+        user_id: userId,
+        name: data.name,
+        description: data.description || null,
+        color: data.color || '#4CAF50'
+      });
 
-      const [insertCat] = await connection.query(
-        `INSERT INTO categories (user_id, name, description, color) VALUES (?, ?, ?, ?)`,
-        [userId, data.name, data.description || null, data.color || '#4CAF50']
-      );
-      const categoryId = insertCat.insertId;
+      await trx('holdings').insert({
+        category_id: categoryId,
+        quantity: 0,
+        average_price: 0,
+        total_invested: 0,
+        current_value: 0
+      });
 
-      await connection.query(
-        `INSERT INTO holdings (category_id, quantity, average_price, total_invested, current_value)
-         VALUES (?, 0, 0, 0, 0)`,
-        [categoryId]
-      );
-
-      await connection.commit();
-      return await Category.findById(categoryId);
-    } catch (err) {
-      await connection.rollback();
-      throw err;
-    } finally {
-      connection.release();
-    }
+      return Category.findById(categoryId);
+    });
   }
 
   async updateCategory(id, data, userId) {
-    // Kiểm tra category thuộc về user
     const belongsToUser = await Category.belongsToUser(id, userId);
     if (!belongsToUser) {
       throw new Error('Category not found');
@@ -61,7 +44,6 @@ class CategoryService {
 
     const existing = await Category.findById(id);
 
-    // Kiểm tra trùng tên với category khác của cùng user
     if (data.name && data.name !== existing.name) {
       const duplicate = await Category.findByName(data.name, userId);
       if (duplicate) {
@@ -69,7 +51,7 @@ class CategoryService {
       }
     }
 
-    return await Category.update(id, {
+    return Category.update(id, {
       name: data.name || existing.name,
       description: data.description !== undefined ? data.description : existing.description,
       color: data.color || existing.color
@@ -77,18 +59,16 @@ class CategoryService {
   }
 
   async deleteCategory(id, userId) {
-    // Kiểm tra category thuộc về user
     const belongsToUser = await Category.belongsToUser(id, userId);
     if (!belongsToUser) {
       throw new Error('Category not found');
     }
-    
-    return await Category.delete(id);
+
+    return Category.delete(id);
   }
 
-  // Kiểm tra category thuộc về user (cho các service khác sử dụng)
   async verifyCategoryOwnership(categoryId, userId) {
-    return await Category.belongsToUser(categoryId, userId);
+    return Category.belongsToUser(categoryId, userId);
   }
 }
 

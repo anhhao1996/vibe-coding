@@ -6,9 +6,6 @@ const express = require('express');
 const router = express.Router();
 const ExpenseController = require('../controllers/ExpenseController');
 
-// GET /api/expenses - Lấy tất cả chi tiêu hàng tháng
-router.get('/', (req, res) => ExpenseController.getAll(req, res));
-
 // GET /api/expenses/trend - Lấy xu hướng chi tiêu
 router.get('/trend', (req, res) => ExpenseController.getTrend(req, res));
 
@@ -21,17 +18,11 @@ router.get('/tracked-items', (req, res) => ExpenseController.getTrackedItems(req
 // PUT /api/expenses/tracked-items - Lưu danh sách tracked items của user
 router.put('/tracked-items', (req, res) => ExpenseController.saveTrackedItems(req, res));
 
-// GET /api/expenses/trend/item/:itemName - Lấy xu hướng theo tên khoản chi
-router.get('/trend/item/:itemName', (req, res) => ExpenseController.getItemTrend(req, res));
-
 // POST /api/expenses/trend/items - Lấy xu hướng nhiều khoản chi
 router.post('/trend/items', (req, res) => ExpenseController.getMultipleItemsTrend(req, res));
 
 // GET /api/expenses/month/:month - Lấy chi tiêu theo tháng
 router.get('/month/:month', (req, res) => ExpenseController.getByMonth(req, res));
-
-// GET /api/expenses/:id - Lấy chi tiêu theo ID
-router.get('/:id', (req, res) => ExpenseController.getById(req, res));
 
 // POST /api/expenses - Tạo chi tiêu tháng mới
 router.post('/', (req, res) => ExpenseController.createMonth(req, res));

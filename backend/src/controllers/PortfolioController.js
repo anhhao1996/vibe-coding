@@ -15,52 +15,6 @@ class PortfolioController extends BaseController {
     }
   }
 
-  async getOverview(req, res) {
-    try {
-      const overview = await PortfolioService.getPortfolioOverview(req.user.id);
-      return this.sendSuccess(res, overview, 'Portfolio overview retrieved successfully');
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
-  async getDistribution(req, res) {
-    try {
-      const distribution = await PortfolioService.getPortfolioDistribution(req.user.id);
-      return this.sendSuccess(res, distribution, 'Portfolio distribution retrieved successfully');
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
-  async getPnlByCategory(req, res) {
-    try {
-      const pnl = await PortfolioService.getPnlByCategory(req.user.id);
-      return this.sendSuccess(res, pnl, 'PnL by category retrieved successfully');
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
-  async getPnl7Days(req, res) {
-    try {
-      const pnl = await PortfolioService.getPnlLast7Days(req.user.id);
-      return this.sendSuccess(res, pnl, 'PnL last 7 days retrieved successfully');
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
-  async getHistory(req, res) {
-    try {
-      const days = parseInt(req.query.days) || 30;
-      const history = await PortfolioService.getPortfolioHistory(days, req.user.id);
-      return this.sendSuccess(res, history, 'Portfolio history retrieved successfully');
-    } catch (error) {
-      return this.handleError(res, error);
-    }
-  }
-
   async updateCurrentPrice(req, res) {
     try {
       const { categoryId } = req.params;

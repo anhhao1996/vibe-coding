@@ -10,12 +10,12 @@ class SavingsTransaction extends BaseModel {
   }
 
   async findBySavingsBook(savingsBookId) {
-    const sql = `
-      SELECT * FROM ${this.tableName} 
-      WHERE savings_book_id = ? 
-      ORDER BY transaction_date DESC, created_at DESC
-    `;
-    return await this.db.query(sql, [savingsBookId]);
+    return this.qb()
+      .where({ savings_book_id: savingsBookId })
+      .orderBy([
+        { column: 'transaction_date', order: 'desc' },
+        { column: 'created_at', order: 'desc' }
+      ]);
   }
 }
 
